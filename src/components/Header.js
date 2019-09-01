@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 const LoggedOutView = props => {
@@ -61,11 +61,7 @@ const LoggedInView = props => {
   return null;
 };
 
-class Header extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
+class Header extends Component {
   render() {
     const { currentUser, appName } = this.props;
     return (

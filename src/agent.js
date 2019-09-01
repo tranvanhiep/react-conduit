@@ -21,10 +21,10 @@ const setToken = _token => {
   token = _token;
 };
 
-const makeRequest = (method, url) =>
-  superagent[method](url)
-    .use(tokenPlugin)
-    .then(responseBody);
+// const makeRequest = (method, url) =>
+//   superagent[method](url)
+//     .use(tokenPlugin)
+//     .then(responseBody);
 
 const requests = {
   get: url =>
@@ -50,7 +50,7 @@ const requests = {
 };
 
 const Auth = {
-  current: requests.get('/user'),
+  current: () => requests.get('/user'),
   login: (email, password) => requests.post('/users/login', { user: { email, password } }),
   register: (username, email, password) =>
     requests.post('/users', { user: { username, email, password } }),
