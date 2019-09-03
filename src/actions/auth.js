@@ -3,6 +3,7 @@ import {
   LOGIN,
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOAD,
+  REGISTER,
 } from '../constants/actionTypes';
 import agent from '../agent';
 
@@ -14,6 +15,11 @@ export const updateFieldAuth = (key, value) => ({
 export const login = (email, password) => ({
   type: LOGIN,
   payload: agent.Auth.login(email, password),
+});
+
+export const register = (username, email, password) => ({
+  type: REGISTER,
+  payload: agent.Auth.register(username, email, password),
 });
 
 export const unloadLoginPage = () => ({ type: LOGIN_PAGE_UNLOADED });

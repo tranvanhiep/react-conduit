@@ -8,6 +8,7 @@ import {
 } from '../constants/actionTypes';
 
 const initialState = {
+  username: '',
   email: '',
   password: '',
   inProgress: false,
@@ -43,7 +44,7 @@ export default (state = initialState, action) => {
           inProgress: true,
         };
       }
-      break;
+      return state;
     }
     case LOGIN_PAGE_UNLOADED:
     case REGISTER_PAGE_UNLOAD:

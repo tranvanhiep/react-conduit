@@ -67,6 +67,8 @@ const Tags = {
   getAll: () => requests.get('/tags'),
 };
 
+const omitSlug = article => ({ ...article, slug: undefined });
+
 const limit = (count, page) => `limit=${count}&offset=${page ? page * count : 0}`;
 
 const Articles = {
@@ -80,7 +82,7 @@ const Articles = {
   unfavorite: slug => requests.delete(`/articles/${slug}/favorite`),
   create: article => requests.post('/articles', { article }),
   get: slug => requests.get(`/articles/${slug}`),
-  update: article => requests.put(`/articles/${article.slug}`, { article }),
+  update: article => requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
   delete: slug => requests.delete(`/articles/${slug}`),
 };
 

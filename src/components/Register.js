@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorsList from './ErrorsList';
 import { connect } from 'react-redux';
-import { updateFieldAuth, login, unloadLoginPage } from '../actions/auth';
+import { updateFieldAuth, register, unloadRegisterPage } from '../actions/auth';
 
-class Login extends Component {
+class Register extends Component {
+  onChangeUsername = event => {
+    this.props.updateFieldAuth('username', event.target.value);
+  };
+
   onChangeEmail = event => {
     this.props.updateFieldAuth('email', event.target.value);
   };
@@ -13,17 +17,17 @@ class Login extends Component {
     this.props.updateFieldAuth('password', event.target.value);
   };
 
-  submit = (email, password) => event => {
+  submit = (username, email, password) => event => {
     event.preventDefault();
-    this.props.login(email, password);
+    this.props.register(username, email, password);
   };
 
   componentWillUnmount() {
-    this.props.unloadLoginPage();
+    this.props.unloadRegisterPage();
   }
 
   render() {
-    const { email, password, errors, inProgress } = this.props;
+    const { username, email, password, errors, inProgress } = this.props;
 
     return (
       <div className="auth-page">
@@ -32,12 +36,22 @@ class Login extends Component {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign in</h1>
               <p className="text-xs-center">
-                <Link to="/register">Need an account?</Link>
+                <Link to="/login">Have an account?</Link>
               </p>
 
               <ErrorsList errors={errors} />
 
-              <form onSubmit={this.submit(email, password)}>
+              <form onSubmit={this.submit(username, email, password)}>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="text"
+                    placeholder="Your Name"
+                    value={username}
+                    onChange={this.onChangeUsername}
+                    disabled={inProgress}
+                  />
+                </fieldset>
                 <fieldset className="form-group">
                   <input
                     className="form-control form-control-lg"
@@ -61,9 +75,9 @@ class Login extends Component {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={inProgress || !email || !password}
+                  disabled={inProgress || !email || !password || !username}
                 >
-                  Sign in
+                  Sign up
                 </button>
               </form>
             </div>
@@ -78,5 +92,5 @@ const mapStateToProps = state => ({ ...state.auth });
 
 export default connect(
   mapStateToProps,
-  { updateFieldAuth, login, unloadLoginPage }
-)(Login);
+  { updateFieldAuth, register, unloadRegisterPage }
+)(Register);
