@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { favorite, unfavorite } from '../actions/article';
 
 class ArticlePreview extends Component {
+  toggleFavorite = (favorited, slug) => event => {
+    event.preventDefault();
+    if (favorited) {
+      this.props.unfavorite(slug);
+    } else {
+      this.props.favorite(slug);
+    }
+  };
+
   render() {
     const {
       slug,
@@ -31,6 +42,7 @@ class ArticlePreview extends Component {
             className={`btn btn-sm pull-xs-right ${
               favorited ? 'btn-primary' : 'btn-outline-primary'
             }`}
+            onClick={this.toggleFavorite(favorited, slug)}
           >
             <i className="ion-heart"></i> {favoritesCount}
           </button>
@@ -53,4 +65,7 @@ class ArticlePreview extends Component {
   }
 }
 
-export default ArticlePreview;
+export default connect(
+  null,
+  { favorite, unfavorite }
+)(ArticlePreview);

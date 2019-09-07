@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { loadHomePage, unloadHomePage } from '../../actions/home';
+import { setTagFilter } from '../../actions/articleList';
 import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';
@@ -17,7 +18,7 @@ class Home extends Component {
   }
 
   render() {
-    const { token, appName, tags } = this.props;
+    const { token, appName, tags, setTagFilter } = this.props;
 
     return (
       <div className="home-page">
@@ -28,7 +29,7 @@ class Home extends Component {
             <div className="col-md-3">
               <div className="sidebar">
                 <p>Popular Tags</p>
-                <Tags tags={tags} />
+                <Tags tags={tags} onSelectTag={setTagFilter} />
               </div>
             </div>
           </div>
@@ -46,5 +47,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loadHomePage, unloadHomePage }
+  { loadHomePage, unloadHomePage, setTagFilter }
 )(Home);

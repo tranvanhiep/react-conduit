@@ -12,3 +12,6 @@ export const HOME_PAGE_LOADED = 'HOME_PAGE_LOADED';
 export const HOME_PAGE_UNLOADED = 'HOME_PAGE_UNLOADED';
 export const REDIRECT = 'REDIRECT';
 export const SET_PAGE = 'SET_PAGE';
+export const FAVORITE = 'FAVORITE';
+export const UNFAVORITE = 'UNFAVORITE';
+export const APPLY_TAG_FILTER = 'APPLY_TAG_FILTER';

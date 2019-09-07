@@ -3,6 +3,9 @@ import {
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
   SET_PAGE,
+  FAVORITE,
+  UNFAVORITE,
+  APPLY_TAG_FILTER,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -56,6 +59,38 @@ export default (state = initialState, action) => {
         articles,
         articlesCount,
         currentPage,
+      };
+    }
+    case FAVORITE:
+    case UNFAVORITE: {
+      const {
+        article: { slug, favorited, favoritesCount },
+      } = payload;
+      return {
+        ...state,
+        articles: state.articles.map(article => {
+          if (article.slug === slug) {
+            return {
+              ...article,
+              favorited,
+              favoritesCount,
+            };
+          }
+          return article;
+        }),
+      };
+    }
+    case APPLY_TAG_FILTER: {
+      const { pager, tag } = action;
+      const { articles, articlesCount } = payload;
+      return {
+        ...state,
+        articles,
+        articlesCount,
+        pager,
+        currentPage: 1,
+        tag,
+        tab: null,
       };
     }
     default:

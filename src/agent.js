@@ -44,7 +44,7 @@ const requests = {
       .then(responseBody),
   delete: url =>
     superagent
-      .delete(`${API_ROOT}${url}`)
+      .del(`${API_ROOT}${url}`)
       .use(tokenPlugin)
       .then(responseBody),
 };
