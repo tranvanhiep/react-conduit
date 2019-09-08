@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setPage } from '../actions/articleList';
+import { setPage } from '../../actions/articleList';
+import cx from 'classnames';
 
 class Pagination extends Component {
   setPage = page => event => {
     const { pager } = this.props;
     event.preventDefault();
     this.props.setPage(page, pager);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
   render() {
@@ -21,10 +23,7 @@ class Pagination extends Component {
       <nav>
         <ul className="pagination">
           {range.map(page => (
-            <li
-              className={`page-item ${page === currentPage ? 'active' : ''}`}
-              key={page.toString()}
-            >
+            <li className={cx('page-item', { active: page === currentPage })} key={page.toString()}>
               <button className="page-link" onClick={this.setPage(page - 1)}>
                 {page}
               </button>

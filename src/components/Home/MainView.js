@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { changeTab } from '../../actions/articleList';
-import ArticleList from '../ArticleList';
+import ArticleList from '../common/ArticleList';
+import cx from 'classnames';
 
 const YourFeedTab = ({ token, tab, onChangeTab }) => {
   if (!token) {
@@ -10,10 +11,7 @@ const YourFeedTab = ({ token, tab, onChangeTab }) => {
 
   return (
     <li className="nav-item">
-      <button
-        className={`nav-link ${tab === 'feed' ? 'active' : ''}`}
-        onClick={onChangeTab('feed')}
-      >
+      <button className={cx('nav-link', { active: tab === 'feed' })} onClick={onChangeTab('feed')}>
         Your Feed
       </button>
     </li>
@@ -23,10 +21,7 @@ const YourFeedTab = ({ token, tab, onChangeTab }) => {
 const GlobalFeedTab = ({ tab, onChangeTab }) => {
   return (
     <li className="nav-item">
-      <button
-        className={`nav-link ${tab === 'all' ? 'active' : ''}`}
-        onClick={onChangeTab('all')}
-      >
+      <button className={cx('nav-link', { active: tab === 'all' })} onClick={onChangeTab('all')}>
         Global Feed
       </button>
     </li>

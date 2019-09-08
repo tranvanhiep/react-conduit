@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ErrorsList from './ErrorsList';
+import ErrorsList from './common/ErrorsList';
 import { connect } from 'react-redux';
 import { updateFieldAuth, register, unloadRegisterPage } from '../actions/auth';
 
