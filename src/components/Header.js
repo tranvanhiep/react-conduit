@@ -1,61 +1,64 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-const LoggedOutView = props => {
-  if (!props.currentUser) {
-    return (
-      <ul className="nav navbar-nav pull-xs-right">
-        <li className="nav-item">
-          <Link className="nav-link" to="/">
-            Home
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">
-            Sign in
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/register">
-            Sign up
-          </Link>
-        </li>
-      </ul>
-    );
+const LoggedOutView = ({ currentUser }) => {
+  if (currentUser) {
+    return null;
   }
-  return null;
+
+  return (
+    <ul className="nav navbar-nav pull-xs-right">
+      <li className="nav-item">
+        <Link className="nav-link" to="/">
+          Home
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/login">
+          Sign in
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/register">
+          Sign up
+        </Link>
+      </li>
+    </ul>
+  );
 };
 
-const LoggedInView = props => {
-  if (props.currentUser) {
-    const { username, image } = props.currentUser;
-    return (
-      <ul className="nav navbar-nav pull-xs-right">
-        <li className="nav-item">
-          <Link className="nav-link" to="/">
-            Home
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/editor">
-            <i className="ion-compose"></i>&nbsp;New Post
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/settings">
-            <i className="ion-gear-a"></i>&nbsp;Settings
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to={`/${username}`}>
-            <img src={image} alt={username} className="user-pic" />
-            {username}
-          </Link>
-        </li>
-      </ul>
-    );
+const LoggedInView = ({ currentUser }) => {
+  if (!currentUser) {
+    return null;
   }
-  return null;
+
+  const { username, image } = currentUser;
+
+  return (
+    <ul className="nav navbar-nav pull-xs-right">
+      <li className="nav-item">
+        <Link className="nav-link" to="/">
+          Home
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/editor">
+          <i className="ion-compose"></i>&nbsp;New Post
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to="/settings">
+          <i className="ion-gear-a"></i>&nbsp;Settings
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link className="nav-link" to={`/${username}`}>
+          <img src={image} alt={username} className="user-pic" />
+          {username}
+        </Link>
+      </li>
+    </ul>
+  );
 };
 
 class Header extends Component {

@@ -5,6 +5,7 @@ import FavoriteButton from './FavoriteButton';
 
 class ArticlePreview extends Component {
   render() {
+    const { from, article } = this.props;
     const {
       slug,
       title,
@@ -15,13 +16,13 @@ class ArticlePreview extends Component {
       favorited,
       favoritesCount,
       author,
-    } = this.props.article;
+    } = article;
 
     return (
       <div className="article-preview">
         <ArticleMeta createdAt={createdAt} author={author}>
           <div className="pull-xs-right">
-            <FavoriteButton slug={slug} favorited={favorited}>
+            <FavoriteButton slug={slug} favorited={favorited} from={from}>
               <i className="ion-heart"></i> {favoritesCount}
             </FavoriteButton>
           </div>

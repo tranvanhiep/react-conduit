@@ -8,14 +8,15 @@ class ArticleMeta extends Component {
       author: { username, image },
       children,
     } = this.props;
+    const encodedUsername = encodeURIComponent(username);
 
     return (
       <div className="article-meta">
-        <Link to={`/profile/${username}`}>
+        <Link to={`/profile/${encodedUsername}`}>
           <img src={image} alt={username} />
         </Link>
         <div className="info">
-          <Link to={`/profile/${username}`} className="author">
+          <Link to={`/profile/${encodedUsername}`} className="author">
             {username}
           </Link>
           <span className="date">{new Date(createdAt).toDateString()}</span>

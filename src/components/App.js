@@ -10,6 +10,7 @@ import { redirect } from '../actions/common';
 import { push } from 'connected-react-router';
 import agent from '../agent';
 import { loadApp } from '../actions/common';
+import Article from './Article';
 
 class App extends Component {
   static getDerivedStateFromProps(nextProps) {
@@ -50,6 +51,7 @@ class App extends Component {
           <Route path="/" component={Home} exact />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/article/:slug" component={Article} />
         </Switch>
         <Footer appName={appName} />
       </Fragment>

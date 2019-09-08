@@ -58,9 +58,9 @@ const Auth = {
 };
 
 const Profiles = {
-  get: username => requests.get(`/profiles/${username}`),
-  follow: username => requests.post(`/profiles/${username}/follow`),
-  unfollow: username => requests.delete(`/profiles/${username}/follow`),
+  get: username => requests.get(`/profiles/${encode(username)}`),
+  follow: username => requests.post(`/profiles/${encode(username)}/follow`),
+  unfollow: username => requests.delete(`/profiles/${encode(username)}/follow`),
 };
 
 const Tags = {
@@ -88,7 +88,7 @@ const Articles = {
 
 const Comments = {
   get: slug => requests.get(`/articles/${slug}/comments`),
-  create: slug => requests.post(`/articles/${slug}/comments`),
+  create: (slug, comment) => requests.post(`/articles/${slug}/comments`, { comment }),
   delele: (slug, id) => requests.delete(`/articles/${slug}/comments/${id}`),
 };
 

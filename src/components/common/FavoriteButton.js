@@ -4,19 +4,19 @@ import cx from 'classnames';
 import { favorite, unfavorite } from '../../actions/article';
 
 class FavoriteButton extends Component {
-  toggleFavorite = (favorited, slug) => event => {
+  toggleFavorite = (favorited, slug, from) => event => {
     event.preventDefault();
     event.currentTarget.blur();
 
     if (favorited) {
-      this.props.unfavorite(slug);
+      this.props.unfavorite(slug, from);
     } else {
-      this.props.favorite(slug);
+      this.props.favorite(slug, from);
     }
   };
 
   render() {
-    const { favorited, slug, children } = this.props;
+    const { favorited, slug, children, from } = this.props;
 
     return (
       <button
@@ -25,7 +25,7 @@ class FavoriteButton extends Component {
           { 'btn-primary': favorited },
           { 'btn-outline-primary': !favorited }
         )}
-        onClick={this.toggleFavorite(favorited, slug)}
+        onClick={this.toggleFavorite(favorited, slug, from)}
       >
         {children}
       </button>

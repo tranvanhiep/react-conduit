@@ -7,6 +7,7 @@ import {
   UNFAVORITE,
   APPLY_TAG_FILTER,
 } from '../constants/actionTypes';
+import { ARTICLE_LIST } from '../constants';
 
 const initialState = {
   articles: null,
@@ -63,22 +64,26 @@ export default (state = initialState, action) => {
     }
     case FAVORITE:
     case UNFAVORITE: {
-      const {
-        article: { slug, favorited, favoritesCount },
-      } = payload;
-      return {
-        ...state,
-        articles: state.articles.map(article => {
-          if (article.slug === slug) {
-            return {
-              ...article,
-              favorited,
-              favoritesCount,
-            };
-          }
-          return article;
-        }),
-      };
+      const { from } = action;
+      if (from === ARTICLE_LIST) {
+        const {
+          article: { slug, favorited, favoritesCount },
+        } = payload;
+        return {
+          ...state,
+          articles: state.articles.map(article => {
+            if (article.slug === slug) {
+              return {
+                ...article,
+                favorited,
+                favoritesCount,
+              };
+            }
+            return article;
+          }),
+        };
+      }
+      return state;
     }
     case APPLY_TAG_FILTER: {
       const { pager, tag } = action;
