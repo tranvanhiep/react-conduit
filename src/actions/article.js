@@ -6,6 +6,7 @@ import {
   ARTICLE_PAGE_UNLOADED,
   DELETE_COMMENT,
   ADD_COMMENT,
+  DELETE_ARTICLE,
 } from '../constants/actionTypes';
 
 export const favorite = (slug, from) => ({
@@ -36,4 +37,9 @@ export const deleteComment = (slug, id) => ({
 export const addComment = (slug, comment) => ({
   type: ADD_COMMENT,
   payload: agent.Comments.create(slug, { body: comment }),
+});
+
+export const deleteArticle = slug => ({
+  type: DELETE_ARTICLE,
+  payload: agent.Articles.delete(slug),
 });

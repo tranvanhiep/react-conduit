@@ -12,7 +12,7 @@ class DeleteButton extends Component {
   render() {
     const { username, currentUser } = this.props;
 
-    if (username !== currentUser.username) {
+    if (!currentUser || username !== currentUser.username) {
       return null;
     }
 
