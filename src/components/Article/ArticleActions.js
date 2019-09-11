@@ -16,27 +16,27 @@ class ArticleActions extends Component {
       slug,
     } = article;
 
-    if (username !== currentUser.username) {
+    if (currentUser && currentUser.username === username) {
       return (
         <Fragment>
-          <FollowButton username={username} following={following}></FollowButton>
+          <Link to={`/editor/${slug}`} className="btn btn-outline-secondary btn-sm">
+            <i className="ion-edit"></i> Edit Article
+          </Link>
           &nbsp;
-          <FavoriteButton favorited={favorited} slug={slug} from={ARTICLE_PAGE}>
-            {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
-          </FavoriteButton>
+          <button className="btn btn-outline-danger btn-sm" onClick={deleteArticle()}>
+            <i className="ion-trash-a"></i> Delete Article
+          </button>
         </Fragment>
       );
     }
 
     return (
       <Fragment>
-        <Link to={`/editor/${slug}`} className="btn btn-outline-secondary btn-sm">
-          <i className="ion-edit"></i> Edit Article
-        </Link>
+        <FollowButton username={username} following={following}></FollowButton>
         &nbsp;
-        <button className="btn btn-outline-danger btn-sm" onClick={deleteArticle()}>
-          <i className="ion-trash-a"></i> Delete Article
-        </button>
+        <FavoriteButton favorited={favorited} slug={slug} from={ARTICLE_PAGE}>
+          {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
+        </FavoriteButton>
       </Fragment>
     );
   }

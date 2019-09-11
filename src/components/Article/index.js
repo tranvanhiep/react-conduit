@@ -65,7 +65,6 @@ class Article extends Component {
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">
               <CommentInput />
-
               <CommentList slug={slug} />
             </div>
           </div>

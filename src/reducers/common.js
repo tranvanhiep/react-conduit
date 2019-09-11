@@ -1,4 +1,11 @@
-import { APP_LOAD, LOGIN, REGISTER, REDIRECT, DELETE_ARTICLE } from '../constants/actionTypes';
+import {
+  APP_LOAD,
+  LOGIN,
+  REGISTER,
+  RESET_REDIRECT,
+  DELETE_ARTICLE,
+  REDIRECT_TO,
+} from '../constants/actionTypes';
 
 const initialState = {
   appName: 'Conduit',
@@ -32,7 +39,9 @@ export default (state = initialState, action) => {
         currentUser: hasError ? null : user,
       };
     }
-    case REDIRECT:
+    case REDIRECT_TO:
+      return { ...state, redirectTo: payload };
+    case RESET_REDIRECT:
       return {
         ...state,
         redirectTo: null,

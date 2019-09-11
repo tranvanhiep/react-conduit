@@ -15,9 +15,11 @@ export const HOME_PAGE_LOADED = 'HOME_PAGE_LOADED';
 export const HOME_PAGE_UNLOADED = 'HOME_PAGE_UNLOADED';
 
 export const CHANGE_TAB = 'CHANGE_TAB';
-export const REDIRECT = 'REDIRECT';
 export const SET_PAGE = 'SET_PAGE';
 export const APPLY_TAG_FILTER = 'APPLY_TAG_FILTER';
+
+export const RESET_REDIRECT = 'RESET_REDIRECT';
+export const REDIRECT_TO = 'REDIRECT_TO';
 
 export const FAVORITE = 'FAVORITE';
 export const UNFAVORITE = 'UNFAVORITE';

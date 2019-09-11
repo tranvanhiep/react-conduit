@@ -1,7 +1,9 @@
 import agent from '../agent';
-import { REDIRECT, APP_LOAD } from '../constants/actionTypes';
+import { RESET_REDIRECT, APP_LOAD, REDIRECT_TO } from '../constants/actionTypes';
 
-export const redirect = () => ({ type: REDIRECT });
+export const redirectToUrl = path => ({ type: REDIRECT_TO, payload: path });
+
+export const resetRedirect = () => ({ type: RESET_REDIRECT });
 
 export const loadApp = token => ({
   type: APP_LOAD,

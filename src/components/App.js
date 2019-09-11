@@ -6,19 +6,20 @@ import Footer from './Footer';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
-import { redirect } from '../actions/common';
+import { resetRedirect } from '../actions/common';
 import { push } from 'connected-react-router';
 import agent from '../agent';
 import { loadApp } from '../actions/common';
 import Article from './Article';
+import Editor from './Editor';
 
 class App extends Component {
   static getDerivedStateFromProps(nextProps) {
-    const { redirectTo, dispatch, redirected } = nextProps;
+    const { redirectTo, dispatch, resetRedirect } = nextProps;
 
     if (redirectTo) {
       dispatch(push(redirectTo));
-      redirected();
+      resetRedirect();
     }
 
     return null;
@@ -52,6 +53,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/article/:slug" component={Article} />
+          <Route path="/editor" component={Editor} />
         </Switch>
         <Footer appName={appName} />
       </Fragment>
@@ -71,7 +73,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   loadApp: token => dispatch(loadApp(token)),
-  redirected: () => dispatch(redirect()),
+  resetRedirect: () => dispatch(resetRedirect()),
   dispatch,
 });
 

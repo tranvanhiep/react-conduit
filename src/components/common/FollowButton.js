@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { follow, unfollow } from '../../actions/profile';
+import { redirectToUrl } from '../../actions/common';
 
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
+    const { currentUser } = this.props;
+
     event.preventDefault();
     event.currentTarget.blur();
 
-    if (following) {
-      this.props.unfollow(username);
+    if (currentUser) {
+      if (following) {
+        this.props.unfollow(username);
+      } else {
+        this.props.follow(username);
+      }
     } else {
-      this.props.follow(username);
+      this.props.redirectToUrl('/login');
     }
   };
 
@@ -33,7 +40,11 @@ class FollowButton extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  currentUser: state.common.currentUser,
+});
+
 export default connect(
-  null,
-  { follow, unfollow }
+  mapStateToProps,
+  { follow, unfollow, redirectToUrl }
 )(FollowButton);
