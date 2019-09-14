@@ -7,8 +7,14 @@ import FollowButton from '../common/FollowButton';
 import { ARTICLE_PAGE } from '../../constants';
 
 class ArticleActions extends Component {
+  delete = slug => event => {
+    event.preventDefault();
+
+    this.props.deleteArticle(slug);
+  };
+
   render() {
-    const { currentUser, article, deleteArticle } = this.props;
+    const { currentUser, article } = this.props;
     const {
       author: { username, following },
       favorited,
@@ -23,7 +29,7 @@ class ArticleActions extends Component {
             <i className="ion-edit"></i> Edit Article
           </Link>
           &nbsp;
-          <button className="btn btn-outline-danger btn-sm" onClick={deleteArticle()}>
+          <button className="btn btn-outline-danger btn-sm" onClick={this.delete(slug)}>
             <i className="ion-trash-a"></i> Delete Article
           </button>
         </Fragment>

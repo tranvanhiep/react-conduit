@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import ErrorsList from '../common/ErrorsList';
 import { addComment } from '../../actions/article';
 
@@ -18,10 +18,11 @@ class CommentInput extends Component {
   };
 
   submit = event => {
+    event.preventDefault();
     const {
       article: { slug },
     } = this.props;
-    event.preventDefault();
+
     this.props.addComment(slug, this.state.content);
     this.setState({ content: '' });
   };
@@ -72,6 +73,7 @@ class CommentInput extends Component {
 const mapStateToProps = state => ({
   commentErrors: state.article.commentErrors,
   currentUser: state.common.currentUser,
+  article: state.article.article,
 });
 
 export default connect(

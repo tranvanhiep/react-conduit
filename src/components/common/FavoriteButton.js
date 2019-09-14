@@ -6,9 +6,9 @@ import { redirectToUrl } from '../../actions/common';
 
 class FavoriteButton extends Component {
   toggleFavorite = (favorited, slug, from) => event => {
+    event.preventDefault();
     const { currentUser } = this.props;
 
-    event.preventDefault();
     event.currentTarget.blur();
 
     if (currentUser) {

@@ -4,9 +4,9 @@ import { deleteComment } from '../../actions/article';
 
 class DeleteButton extends Component {
   deleteComment = event => {
+    event.preventDefault();
     const { id, slug } = this.props;
 
-    event.preventDefault();
     this.props.deleteComment(slug, id);
   };
   render() {

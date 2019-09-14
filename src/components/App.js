@@ -14,6 +14,11 @@ import Article from './Article';
 import Editor from './Editor';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   static getDerivedStateFromProps(nextProps) {
     const { redirectTo, dispatch, resetRedirect } = nextProps;
 
@@ -53,6 +58,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/article/:slug" component={Article} />
+          <Route path="/editor/:slug" component={Editor} />
           <Route path="/editor" component={Editor} />
         </Switch>
         <Footer appName={appName} />

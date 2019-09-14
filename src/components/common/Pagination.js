@@ -5,8 +5,9 @@ import cx from 'classnames';
 
 class Pagination extends Component {
   setPage = page => event => {
-    const { pager } = this.props;
     event.preventDefault();
+    const { pager } = this.props;
+
     this.props.setPage(page, pager);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };

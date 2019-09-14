@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const LoggedOutView = ({ currentUser }) => {
   if (currentUser) {
@@ -9,19 +9,19 @@ const LoggedOutView = ({ currentUser }) => {
   return (
     <ul className="nav navbar-nav pull-xs-right">
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <NavLink className="nav-link" to="/" exact activeClassName="active">
           Home
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/login">
+        <NavLink className="nav-link" to="/login" activeClassName="active">
           Sign in
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/register">
+        <NavLink className="nav-link" to="/register" activeClassName="active">
           Sign up
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );
@@ -37,25 +37,25 @@ const LoggedInView = ({ currentUser }) => {
   return (
     <ul className="nav navbar-nav pull-xs-right">
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <NavLink className="nav-link" to="/" exact activeClassName="active">
           Home
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/editor">
+        <NavLink className="nav-link" to="/editor" activeClassName="active">
           <i className="ion-compose"></i>&nbsp;New Post
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/settings">
+        <NavLink className="nav-link" to="/settings" activeClassName="active">
           <i className="ion-gear-a"></i>&nbsp;Settings
-        </Link>
+        </NavLink>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to={`/${username}`}>
+        <NavLink className="nav-link" to={`/${username}`} activeClassName="active">
           <img src={image} alt={username} className="user-pic" />
           {username}
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );
@@ -67,9 +67,9 @@ class Header extends Component {
     return (
       <nav className="navbar navbar-light">
         <div className="container">
-          <Link className="navbar-brand" to="/">
+          <NavLink className="navbar-brand" to="/">
             {appName.toLowerCase()}
-          </Link>
+          </NavLink>
 
           <LoggedOutView currentUser={currentUser} />
           <LoggedInView currentUser={currentUser} />

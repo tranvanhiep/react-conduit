@@ -6,9 +6,9 @@ import { redirectToUrl } from '../../actions/common';
 
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
+    event.preventDefault();
     const { currentUser } = this.props;
 
-    event.preventDefault();
     event.currentTarget.blur();
 
     if (currentUser) {
