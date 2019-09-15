@@ -16,13 +16,13 @@ class Settings extends Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    const { loaded } = nextProps;
+  static getDerivedStateFromProps(props) {
+    const { loaded } = props;
 
     if (!loaded) {
       const {
         currentUser: { image, username, email, bio },
-      } = nextProps;
+      } = props;
 
       return { image, username, email, bio };
     }

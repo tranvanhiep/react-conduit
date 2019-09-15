@@ -2,14 +2,34 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createArticle, updateArticle } from '../actions/article';
 import ErrorsList from './common/ErrorsList';
-import { unloadEditor, loadEditor, updateFieldEditor } from '../actions/editor';
+import { unloadEditor, loadEditor } from '../actions/editor';
 
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: '',
+      description: '',
+      body: '',
+      tagInput: '',
       tagList: [],
+      ready: false,
     };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { loaded } = props;
+    const { ready } = state;
+
+    if (loaded && !ready) {
+      const {
+        article: { title, description, body, tagList },
+      } = props;
+
+      return { title, description, body, tagList, ready: true };
+    }
+
+    return null;
   }
 
   componentDidMount() {
@@ -21,6 +41,8 @@ class Editor extends Component {
 
     if (slug) {
       this.props.loadEditor(slug);
+    } else {
+      this.setState(state => ({ ...state, ready: true }));
     }
   }
 
@@ -32,24 +54,23 @@ class Editor extends Component {
     event.preventDefault();
     const value = event.currentTarget.value;
 
-    if (field === 'tagInput') {
-      this.setState(state => ({ ...state, tagInput: value }));
-    }
-
-    this.props.updateFieldEditor({ key: field, value });
+    this.setState(state => ({ ...state, [field]: value }));
   };
 
   addTag = event => {
-    const {
-      article: { tagList },
-    } = this.props;
     const currentTag = event.currentTarget.value.trim();
 
     if (event.key === 'Enter') {
-      if (currentTag && !tagList.some(tag => tag === currentTag)) {
-        tagList.push(currentTag);
-        this.props.updateFieldEditor({ key: 'tagList', value: tagList });
-      }
+      this.setState(state => {
+        const { tagList } = state;
+
+        if (currentTag && !tagList.some(tag => tag === currentTag)) {
+          tagList.push(currentTag);
+          return { ...state, tagList, tagInput: '' };
+        }
+
+        return state;
+      });
 
       this.setState(state => ({ ...state, tagInput: '' }));
     }
@@ -57,14 +78,11 @@ class Editor extends Component {
 
   removeTag = currentTag => event => {
     event.preventDefault();
-    const {
-      article: { tagList },
-    } = this.props;
 
-    this.props.updateFieldEditor({
-      key: 'tagList',
-      value: tagList.filter(tag => tag !== currentTag),
-    });
+    this.setState(state => ({
+      ...state,
+      tagList: state.tagList.filter(tag => tag !== currentTag),
+    }));
   };
 
   submit = event => {
@@ -73,8 +91,8 @@ class Editor extends Component {
       match: {
         params: { slug },
       },
-      article: { title, description, body, tagList },
     } = this.props;
+    const { title, description, body, tagList } = this.state;
 
     if (slug) {
       this.props.updateArticle({ slug, title, description, body, tagList });
@@ -84,12 +102,8 @@ class Editor extends Component {
   };
 
   render() {
-    const {
-      article: { title, description, body, tagList },
-      inProgress,
-      errors,
-    } = this.props;
-    const { tagInput } = this.state;
+    const { inProgress, errors } = this.props;
+    const { title, description, body, tagList, tagInput } = this.state;
     const invalid = !title || !description || !body;
 
     return (
@@ -169,5 +183,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createArticle, updateArticle, unloadEditor, loadEditor, updateFieldEditor }
+  { createArticle, updateArticle, unloadEditor, loadEditor }
 )(Editor);
