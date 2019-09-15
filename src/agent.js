@@ -73,10 +73,10 @@ const limit = (count, page) => `limit=${count}&offset=${page ? page * count : 0}
 
 const Articles = {
   all: page => requests.get(`/articles?${limit(10, page)}`),
-  byAuthor: (author, page) => requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
-  byTag: (tag, page) => requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
-  favoritedBy: (author, page) =>
-    requests.get(`/article?favorited=${encode(author)}&${limit(5, page)}`),
+  byAuthor: author => page => requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
+  byTag: tag => page => requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
+  favoritedBy: author => page =>
+    requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
   feed: page => requests.get(`/articles/feed?${limit(10, page)}`),
   favorite: slug => requests.post(`/articles/${slug}/favorite`),
   unfavorite: slug => requests.delete(`/articles/${slug}/favorite`),

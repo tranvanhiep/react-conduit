@@ -6,6 +6,8 @@ import {
   FAVORITE,
   UNFAVORITE,
   APPLY_TAG_FILTER,
+  PROFILE_PAGE_LOADED,
+  PROFILE_PAGE_UNLOADED,
 } from '../constants/actionTypes';
 import { ARTICLE_LIST } from '../constants';
 
@@ -38,6 +40,7 @@ export default (state = initialState, action) => {
       };
     }
     case HOME_PAGE_UNLOADED:
+    case PROFILE_PAGE_UNLOADED:
       return initialState;
     case CHANGE_TAB: {
       const { tab, pager } = action;
@@ -96,6 +99,17 @@ export default (state = initialState, action) => {
         currentPage: 1,
         tag,
         tab: null,
+      };
+    }
+    case PROFILE_PAGE_LOADED: {
+      const { articles, articlesCount } = payload[1];
+      const { pager } = action;
+      return {
+        ...state,
+        articles,
+        articlesCount,
+        pager,
+        currentPage: 1,
       };
     }
     default:

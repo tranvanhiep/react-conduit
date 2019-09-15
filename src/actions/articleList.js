@@ -16,7 +16,7 @@ export const setPage = (page, pager) => ({
 
 export const setTagFilter = (tag, pager) => ({
   type: APPLY_TAG_FILTER,
-  payload: pager(tag, 0),
-  pager,
+  payload: pager(tag)(0),
+  pager: pager(tag),
   tag,
 });

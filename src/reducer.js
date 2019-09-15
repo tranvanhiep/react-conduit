@@ -6,6 +6,7 @@ import articleList from './reducers/articleList';
 import article from './reducers/article';
 import editor from './reducers/editor';
 import settings from './reducers/settings';
+import profile from './reducers/profile';
 
 export default history =>
   combineReducers({
@@ -15,5 +16,6 @@ export default history =>
     article,
     editor,
     settings,
+    profile,
     router: connectRouter(history),
   });

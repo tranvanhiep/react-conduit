@@ -13,6 +13,7 @@ import { loadApp } from '../actions/common';
 import Article from './Article';
 import Editor from './Editor';
 import Settings from './Settings';
+import Profile from './Profile';
 
 class App extends Component {
   constructor(props) {
@@ -62,7 +63,8 @@ class App extends Component {
           <Route path="/editor/:slug" component={Editor} />
           <Route path="/editor" component={Editor} />
           <Route path="/settings" component={Settings} />
-          {/* <Route path="/profile/:username" component={} /> */}
+          <Route path="/profile/:username/favorites" component={Profile} />
+          <Route path="/profile/:username" component={Profile} />
         </Switch>
         <Footer appName={appName} />
       </Fragment>

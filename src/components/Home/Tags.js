@@ -6,6 +6,7 @@ class Tags extends Component {
     event.preventDefault();
     this.props.onSelectTag(tag, agent.Articles.byTag);
   };
+
   render() {
     const { tags } = this.props;
 
