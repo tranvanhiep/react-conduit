@@ -5,6 +5,15 @@ import common from './reducers/common';
 import articleList from './reducers/articleList';
 import article from './reducers/article';
 import editor from './reducers/editor';
+import settings from './reducers/settings';
 
 export default history =>
-  combineReducers({ auth, common, articleList, article, editor, router: connectRouter(history) });
+  combineReducers({
+    auth,
+    common,
+    articleList,
+    article,
+    editor,
+    settings,
+    router: connectRouter(history),
+  });

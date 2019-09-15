@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 class Banner extends Component {
   render() {
-    const { appName, token } = this.props;
+    const { appName, currentUser } = this.props;
 
-    if (token) {
+    if (currentUser) {
       return null;
     }
 

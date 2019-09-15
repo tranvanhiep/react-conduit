@@ -5,11 +5,14 @@ import {
   RESET_REDIRECT,
   DELETE_ARTICLE,
   REDIRECT_TO,
+  LOGOUT,
+  UPDATE_USER,
+  CREATE_ARTICLE,
+  UPDATE_ARTICLE,
 } from '../constants/actionTypes';
 
 const initialState = {
   appName: 'Conduit',
-  token: null,
   appLoaded: false,
   currentUser: null,
   redirectTo: null,
@@ -20,12 +23,12 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case APP_LOAD: {
-      const { token } = action;
+      const { hasError } = action;
+      const { user } = payload;
       return {
         ...state,
-        token: token || null,
         appLoaded: true,
-        currentUser: payload ? payload.user : null,
+        currentUser: hasError ? null : user,
       };
     }
     case LOGIN:
@@ -35,20 +38,46 @@ export default (state = initialState, action) => {
       return {
         ...state,
         redirectTo: hasError ? null : '/',
-        token: hasError ? null : user.token,
         currentUser: hasError ? null : user,
       };
     }
+    case LOGOUT:
+      return {
+        ...state,
+        currentUser: null,
+        redirectTo: '/',
+      };
     case REDIRECT_TO:
       return { ...state, redirectTo: payload };
     case RESET_REDIRECT:
-      return {
-        ...state,
-        redirectTo: null,
-      };
+      return { ...state, redirectTo: null };
     case DELETE_ARTICLE: {
       const { hasError } = action;
       return { ...state, redirectTo: hasError ? null : '/' };
+    }
+    case UPDATE_USER: {
+      const { user } = payload;
+      const { hasError } = action;
+      if (!hasError) {
+        const { username } = user;
+        return {
+          ...state,
+          currentUser: user,
+          redirectTo: `/profile/${username}`,
+        };
+      }
+      return state;
+    }
+    case CREATE_ARTICLE:
+    case UPDATE_ARTICLE: {
+      const { hasError } = action;
+      if (!hasError) {
+        const {
+          article: { slug },
+        } = payload;
+        return { ...state, redirectTo: `/article/${slug}` };
+      }
+      return state;
     }
     default:
       return state;

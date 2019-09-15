@@ -8,9 +8,9 @@ import Tags from './Tags';
 
 class Home extends Component {
   componentDidMount() {
-    const { token } = this.props;
+    const { currentUser } = this.props;
 
-    this.props.loadHomePage(token ? 'feed' : 'all');
+    this.props.loadHomePage(currentUser ? 'feed' : 'all');
   }
 
   componentWillUnmount() {
@@ -18,11 +18,11 @@ class Home extends Component {
   }
 
   render() {
-    const { token, appName, tags, setTagFilter } = this.props;
+    const { currentUser, appName, tags, setTagFilter } = this.props;
 
     return (
       <div className="home-page">
-        <Banner token={token} appName={appName} />
+        <Banner currentUser={currentUser} appName={appName} />
         <div className="container page">
           <div className="row">
             <MainView />
@@ -40,7 +40,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.common.token,
+  currentUser: state.common.currentUser,
   appName: state.common.appName,
   tags: state.articleList.tags,
 });

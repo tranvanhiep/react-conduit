@@ -5,10 +5,10 @@ import ArticleList from '../common/ArticleList';
 import cx from 'classnames';
 import { redirectToUrl } from '../../actions/common';
 
-const YourFeedTab = ({ token, tab, onChangeTab, redirectToUrl }) => {
+const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   let changeTab;
 
-  if (token) {
+  if (currentUser) {
     changeTab = () => onChangeTab('feed');
   } else {
     changeTab = () => redirectToUrl('/login');
@@ -54,14 +54,14 @@ class MainView extends Component {
   };
 
   render() {
-    const { articles, articlesCount, currentPage, tag, token, tab, pager } = this.props;
+    const { articles, articlesCount, currentPage, tag, currentUser, tab, pager } = this.props;
 
     return (
       <div className="col-md-9">
         <div className="feed-toggle">
           <ul className="nav nav-pills outline-active">
             <YourFeedTab
-              token={token}
+              currentUser={currentUser}
               tab={tab}
               onChangeTab={this.handleChangeTab}
               redirectToUrl={this.props.redirectToUrl}
@@ -83,7 +83,6 @@ class MainView extends Component {
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  token: state.common.token,
   currentUser: state.common.currentUser,
 });
 

@@ -12,6 +12,7 @@ import agent from '../agent';
 import { loadApp } from '../actions/common';
 import Article from './Article';
 import Editor from './Editor';
+import Settings from './Settings';
 
 class App extends Component {
   constructor(props) {
@@ -60,6 +61,8 @@ class App extends Component {
           <Route path="/article/:slug" component={Article} />
           <Route path="/editor/:slug" component={Editor} />
           <Route path="/editor" component={Editor} />
+          <Route path="/settings" component={Settings} />
+          {/* <Route path="/profile/:username" component={} /> */}
         </Switch>
         <Footer appName={appName} />
       </Fragment>

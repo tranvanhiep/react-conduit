@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createArticle, updateArticle } from '../actions/article';
 import ErrorsList from './common/ErrorsList';
-import { redirectToUrl } from '../actions/common';
 import { unloadEditor, loadEditor, updateFieldEditor } from '../actions/editor';
 
 class Editor extends Component {
@@ -11,17 +10,6 @@ class Editor extends Component {
     this.state = {
       tagList: [],
     };
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    const { submitted, article } = nextProps;
-
-    if (submitted) {
-      const { slug } = article;
-      nextProps.redirectToUrl(`/article/${slug}`);
-    }
-
-    return null;
   }
 
   componentDidMount() {
@@ -40,15 +28,15 @@ class Editor extends Component {
     this.props.unloadEditor();
   }
 
-  onChange = key => event => {
+  onChange = field => event => {
     event.preventDefault();
     const value = event.currentTarget.value;
 
-    if (key === 'tagInput') {
+    if (field === 'tagInput') {
       this.setState(state => ({ ...state, tagInput: value }));
     }
 
-    this.props.updateFieldEditor({ key, value });
+    this.props.updateFieldEditor({ key: field, value });
   };
 
   addTag = event => {
@@ -181,5 +169,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createArticle, updateArticle, redirectToUrl, unloadEditor, loadEditor, updateFieldEditor }
+  { createArticle, updateArticle, unloadEditor, loadEditor, updateFieldEditor }
 )(Editor);

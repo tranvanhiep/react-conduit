@@ -1,6 +1,5 @@
 import {
   ASYNC_START,
-  ASYNC_END,
   CREATE_ARTICLE,
   EDITOR_PAGE_UNLOADED,
   EDITOR_PAGE_LOADED,
@@ -17,7 +16,6 @@ const initialState = {
   },
   inProgress: false,
   errors: null,
-  submitted: false,
 };
 
 export default (state = initialState, action) => {
@@ -37,23 +35,23 @@ export default (state = initialState, action) => {
         };
       }
       return state;
-    case ASYNC_END:
-      if (subType === CREATE_ARTICLE) {
-        return {
-          ...state,
-          inProgress: false,
-        };
-      }
-      return state;
     case UPDATE_ARTICLE:
     case CREATE_ARTICLE: {
       const { hasError } = action;
       if (hasError) {
         const { errors } = payload;
-        return { ...state, errors };
+        return {
+          ...state,
+          errors,
+          inProgress: false,
+        };
       } else {
         const { article } = payload;
-        return { ...state, submitted: true, article };
+        return {
+          ...state,
+          inProgress: false,
+          article,
+        };
       }
     }
     case EDITOR_PAGE_LOADED: {
