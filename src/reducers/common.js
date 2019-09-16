@@ -23,12 +23,17 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case APP_LOAD: {
-      const { hasError } = action;
-      const { user } = payload;
+      if (payload) {
+        const { hasError } = action;
+        const { user } = payload;
+        return {
+          ...state,
+          currentUser: hasError ? null : user,
+        };
+      }
       return {
         ...state,
         appLoaded: true,
-        currentUser: hasError ? null : user,
       };
     }
     case LOGIN:

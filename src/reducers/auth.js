@@ -1,5 +1,4 @@
 import {
-  UPDATE_FIELD_AUTH,
   LOGIN,
   REGISTER,
   LOGIN_PAGE_UNLOADED,
@@ -8,9 +7,6 @@ import {
 } from '../constants/actionTypes';
 
 const initialState = {
-  username: '',
-  email: '',
-  password: '',
   inProgress: false,
   errors: null,
 };
@@ -19,13 +15,6 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case UPDATE_FIELD_AUTH: {
-      const { key, value } = payload;
-      return {
-        ...state,
-        [key]: value,
-      };
-    }
     case LOGIN:
     case REGISTER: {
       const { hasError } = action;

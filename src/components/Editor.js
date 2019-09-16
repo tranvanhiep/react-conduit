@@ -113,8 +113,8 @@ class Editor extends Component {
             <div className="col-md-10 offset-md-1 col-xs-12">
               <ErrorsList errors={errors} />
               <form>
-                <fieldset>
-                  <fieldset className="form-group" disabled={inProgress}>
+                <fieldset disabled={inProgress}>
+                  <fieldset className="form-group">
                     <input
                       type="text"
                       className="form-control form-control-lg"
@@ -123,7 +123,7 @@ class Editor extends Component {
                       onChange={this.onChange('title')}
                     />
                   </fieldset>
-                  <fieldset className="form-group" disabled={inProgress}>
+                  <fieldset className="form-group">
                     <input
                       type="text"
                       className="form-control"
@@ -132,7 +132,7 @@ class Editor extends Component {
                       onChange={this.onChange('description')}
                     />
                   </fieldset>
-                  <fieldset className="form-group" disabled={inProgress}>
+                  <fieldset className="form-group">
                     <textarea
                       className="form-control"
                       rows="8"
@@ -141,7 +141,7 @@ class Editor extends Component {
                       onChange={this.onChange('body')}
                     ></textarea>
                   </fieldset>
-                  <fieldset className="form-group" disabled={inProgress}>
+                  <fieldset className="form-group">
                     <input
                       type="text"
                       className="form-control"
@@ -162,7 +162,7 @@ class Editor extends Component {
                   <button
                     className="btn btn-lg pull-xs-right btn-primary"
                     type="button"
-                    disabled={invalid || inProgress}
+                    disabled={invalid}
                     onClick={this.submit}
                   >
                     Publish Article

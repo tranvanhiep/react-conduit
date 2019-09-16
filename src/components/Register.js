@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorsList from './common/ErrorsList';
 import { connect } from 'react-redux';
-import { updateFieldAuth, register, unloadRegisterPage } from '../actions/auth';
+import { register, unloadRegisterPage } from '../actions/auth';
 
 class Register extends Component {
-  onChangeUsername = event => {
-    this.props.updateFieldAuth('username', event.target.value);
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      email: '',
+      password: '',
+    };
+  }
 
-  onChangeEmail = event => {
-    this.props.updateFieldAuth('email', event.target.value);
-  };
+  onChangeField = field => event => {
+    event.preventDefault();
+    const value = event.currentTarget.value;
 
-  onChangePassword = event => {
-    this.props.updateFieldAuth('password', event.target.value);
+    this.setState(state => ({ ...state, [field]: value }));
   };
 
   submit = (username, email, password) => event => {
@@ -27,7 +31,8 @@ class Register extends Component {
   }
 
   render() {
-    const { username, email, password, errors, inProgress } = this.props;
+    const { errors, inProgress } = this.props;
+    const { username, email, password } = this.state;
 
     return (
       <div className="auth-page">
@@ -42,43 +47,42 @@ class Register extends Component {
               <ErrorsList errors={errors} />
 
               <form onSubmit={this.submit(username, email, password)}>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Your Name"
-                    value={username}
-                    onChange={this.onChangeUsername}
-                    disabled={inProgress}
-                  />
+                <fieldset disabled={inProgress}>
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="Your Name"
+                      value={username}
+                      onChange={this.onChangeField('username')}
+                    />
+                  </fieldset>
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="Email"
+                      value={email}
+                      onChange={this.onChangeField('email')}
+                    />
+                  </fieldset>
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={this.onChangeField('password')}
+                    />
+                  </fieldset>
+                  <button
+                    className="btn btn-lg btn-primary pull-xs-right"
+                    type="submit"
+                    disabled={!email || !password || !username}
+                  >
+                    Sign up
+                  </button>
                 </fieldset>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Email"
-                    value={email}
-                    onChange={this.onChangeEmail}
-                    disabled={inProgress}
-                  />
-                </fieldset>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={this.onChangePassword}
-                    disabled={inProgress}
-                  />
-                </fieldset>
-                <button
-                  className="btn btn-lg btn-primary pull-xs-right"
-                  type="submit"
-                  disabled={inProgress || !email || !password || !username}
-                >
-                  Sign up
-                </button>
               </form>
             </div>
           </div>
@@ -92,5 +96,5 @@ const mapStateToProps = state => ({ ...state.auth });
 
 export default connect(
   mapStateToProps,
-  { updateFieldAuth, register, unloadRegisterPage }
+  { register, unloadRegisterPage }
 )(Register);
