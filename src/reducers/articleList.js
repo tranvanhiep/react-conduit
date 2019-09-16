@@ -8,6 +8,7 @@ import {
   APPLY_TAG_FILTER,
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
+  CHANGE_TAB_PROFILE,
 } from '../constants/actionTypes';
 import { ARTICLE_LIST } from '../constants';
 
@@ -19,6 +20,7 @@ const initialState = {
   tags: null,
   tag: null,
   currentPage: 0,
+  limit: 0,
 };
 
 export default (state = initialState, action) => {
@@ -26,7 +28,7 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case HOME_PAGE_LOADED: {
-      const { tab, pager } = action;
+      const { tab, pager, limit } = action;
       const { tags } = payload[0];
       const { articles, articlesCount } = payload[1];
       return {
@@ -37,13 +39,14 @@ export default (state = initialState, action) => {
         tab,
         pager,
         currentPage: 1,
+        limit,
       };
     }
     case HOME_PAGE_UNLOADED:
     case PROFILE_PAGE_UNLOADED:
       return initialState;
     case CHANGE_TAB: {
-      const { tab, pager } = action;
+      const { tab, pager, limit } = action;
       const { articles, articlesCount } = payload;
       return {
         ...state,
@@ -53,6 +56,7 @@ export default (state = initialState, action) => {
         pager,
         tag: null,
         currentPage: 1,
+        limit,
       };
     }
     case SET_PAGE: {
@@ -89,7 +93,7 @@ export default (state = initialState, action) => {
       return state;
     }
     case APPLY_TAG_FILTER: {
-      const { pager, tag } = action;
+      const { pager, tag, limit } = action;
       const { articles, articlesCount } = payload;
       return {
         ...state,
@@ -99,17 +103,31 @@ export default (state = initialState, action) => {
         currentPage: 1,
         tag,
         tab: null,
+        limit,
       };
     }
     case PROFILE_PAGE_LOADED: {
       const { articles, articlesCount } = payload[1];
-      const { pager } = action;
+      const { pager, limit } = action;
       return {
         ...state,
         articles,
         articlesCount,
         pager,
         currentPage: 1,
+        limit,
+      };
+    }
+    case CHANGE_TAB_PROFILE: {
+      const { articles, articlesCount } = payload;
+      const { pager, limit } = action;
+      return {
+        ...state,
+        articles,
+        articlesCount,
+        pager,
+        currentPage: 1,
+        limit,
       };
     }
     default:

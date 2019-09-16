@@ -38,9 +38,13 @@ class ArticleActions extends Component {
 
     return (
       <Fragment>
-        <FollowButton username={username} following={following}></FollowButton>
+        <FollowButton
+          username={username}
+          following={following}
+          pageName={ARTICLE_PAGE}
+        ></FollowButton>
         &nbsp;
-        <FavoriteButton favorited={favorited} slug={slug} from={ARTICLE_PAGE}>
+        <FavoriteButton favorited={favorited} slug={slug} pageName={ARTICLE_PAGE}>
           {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
         </FavoriteButton>
       </Fragment>

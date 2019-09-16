@@ -7,15 +7,15 @@ import { redirectToUrl } from '../../actions/common';
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
     event.preventDefault();
-    const { currentUser } = this.props;
+    const { currentUser, pageName } = this.props;
 
     event.currentTarget.blur();
 
     if (currentUser) {
       if (following) {
-        this.props.unfollow(username);
+        this.props.unfollow(username, pageName);
       } else {
-        this.props.follow(username);
+        this.props.follow(username, pageName);
       }
     } else {
       this.props.redirectToUrl('/login');

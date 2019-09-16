@@ -10,7 +10,7 @@ class Home extends Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    this.props.loadHomePage(currentUser ? 'feed' : 'all');
+    this.props.loadHomePage(currentUser ? 'feed' : 'all', 10);
   }
 
   componentWillUnmount() {

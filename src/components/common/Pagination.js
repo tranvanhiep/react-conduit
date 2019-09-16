@@ -13,10 +13,10 @@ class Pagination extends Component {
   };
 
   render() {
-    const { articlesCount, currentPage } = this.props;
-    const range = Array.from(new Array(Math.ceil(articlesCount / 10)), (val, idx) => ++idx);
+    const { articlesCount, currentPage, limit } = this.props;
+    const range = Array.from(new Array(Math.ceil(articlesCount / limit)), (val, idx) => ++idx);
 
-    if (articlesCount <= 10) {
+    if (articlesCount <= limit) {
       return null;
     }
 

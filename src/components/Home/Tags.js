@@ -4,7 +4,7 @@ import agent from '../../agent';
 class Tags extends Component {
   applyFilterTag = tag => event => {
     event.preventDefault();
-    this.props.onSelectTag(tag, agent.Articles.byTag);
+    this.props.onSelectTag(tag, agent.Articles.byTag, 10);
   };
 
   render() {

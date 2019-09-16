@@ -5,7 +5,7 @@ import { ARTICLE_LIST } from '../../constants';
 
 class ArticleList extends Component {
   render() {
-    const { articles, articlesCount, currentPage, pager } = this.props;
+    const { articles, articlesCount, currentPage, pager, limit } = this.props;
 
     if (!articles) {
       return <div className="article-preview">Loading...</div>;
@@ -18,9 +18,14 @@ class ArticleList extends Component {
     return (
       <Fragment>
         {articles.map(article => (
-          <ArticlePreview article={article} key={article.slug} from={ARTICLE_LIST} />
+          <ArticlePreview article={article} key={article.slug} pageName={ARTICLE_LIST} />
         ))}
-        <Pagination articlesCount={articlesCount} currentPage={currentPage} pager={pager} />
+        <Pagination
+          articlesCount={articlesCount}
+          currentPage={currentPage}
+          pager={pager}
+          limit={limit}
+        />
       </Fragment>
     );
   }

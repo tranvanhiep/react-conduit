@@ -5,7 +5,7 @@ import { favorite, unfavorite } from '../../actions/article';
 import { redirectToUrl } from '../../actions/common';
 
 class FavoriteButton extends Component {
-  toggleFavorite = (favorited, slug, from) => event => {
+  toggleFavorite = (favorited, slug, pageName) => event => {
     event.preventDefault();
     const { currentUser } = this.props;
 
@@ -13,9 +13,9 @@ class FavoriteButton extends Component {
 
     if (currentUser) {
       if (favorited) {
-        this.props.unfavorite(slug, from);
+        this.props.unfavorite(slug, pageName);
       } else {
-        this.props.favorite(slug, from);
+        this.props.favorite(slug, pageName);
       }
     } else {
       this.props.redirectToUrl('/login');
@@ -23,7 +23,7 @@ class FavoriteButton extends Component {
   };
 
   render() {
-    const { favorited, slug, children, from } = this.props;
+    const { favorited, slug, children, pageName } = this.props;
 
     return (
       <button
@@ -32,7 +32,7 @@ class FavoriteButton extends Component {
           { 'btn-primary': favorited },
           { 'btn-outline-primary': !favorited }
         )}
-        onClick={this.toggleFavorite(favorited, slug, from)}
+        onClick={this.toggleFavorite(favorited, slug, pageName)}
       >
         {children}
       </button>

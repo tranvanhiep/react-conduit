@@ -4,6 +4,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { loadAuthorArticle, loadFavoriteArticle, unloadProfile } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
+import { PROFILE_PAGE } from '../constants';
+import { changeTabProfile } from '../actions/articleList';
 
 const ProfileAction = ({ currentUser, username, following }) => {
   if (currentUser.username === username) {
@@ -14,14 +16,38 @@ const ProfileAction = ({ currentUser, username, following }) => {
       </Link>
     );
   } else {
-    return <FollowButton username={username} following={following} />;
+    return <FollowButton username={username} following={following} pageName={PROFILE_PAGE} />;
   }
 };
 
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      limit: 5,
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const {
+      match: {
+        params: { username },
+      },
+      loaded,
+    } = props;
+    const { limit } = state;
+
+    if (loaded) {
+      const {
+        profile: { username: prevUsername },
+      } = props;
+
+      if (username !== prevUsername) {
+        props.loadAuthorArticle(username, limit);
+      }
+    }
+
+    return null;
   }
 
   componentDidMount() {
@@ -31,11 +57,12 @@ class Profile extends Component {
         path,
       },
     } = this.props;
+    const { limit } = this.state;
 
     if (/.*favorites/.test(path)) {
-      this.props.loadFavoriteArticle(username);
+      this.props.loadFavoriteArticle(username, limit);
     } else {
-      this.props.loadAuthorArticle(username);
+      this.props.loadAuthorArticle(username, limit);
     }
   }
 
@@ -43,18 +70,14 @@ class Profile extends Component {
     this.props.unloadProfile();
   }
 
-  changeTab = (username, tab) => event => {
-    if (tab === 'favorites') {
-      this.props.loadFavoriteArticle(username);
-    }
+  onChangeTab = (tab, username) => event => {
+    const { limit } = this.state;
 
-    if (tab === 'author') {
-      this.props.loadAuthorArticle(username);
-    }
+    this.props.changeTabProfile(tab, username, limit);
   };
 
   render() {
-    const { profile, currentUser, articles, articlesCount, currentPage, pager } = this.props;
+    const { profile, currentUser, articles, articlesCount, currentPage, pager, limit } = this.props;
 
     if (!profile) {
       return null;
@@ -92,7 +115,7 @@ class Profile extends Component {
                       exact
                       to={`/profile/${username}`}
                       activeClassName="active"
-                      onClick={this.changeTab(username, 'author')}
+                      onClick={this.onChangeTab('author', username)}
                     >
                       My Articles
                     </NavLink>
@@ -101,7 +124,7 @@ class Profile extends Component {
                     <NavLink
                       className="nav-link"
                       to={`/profile/${username}/favorites`}
-                      onClick={this.changeTab(username, 'favorites')}
+                      onClick={this.onChangeTab('favorites', username)}
                     >
                       Favorited Articles
                     </NavLink>
@@ -113,6 +136,7 @@ class Profile extends Component {
                 articlesCount={articlesCount}
                 currentPage={currentPage}
                 pager={pager}
+                limit={limit}
               />
             </div>
           </div>
@@ -130,5 +154,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loadAuthorArticle, loadFavoriteArticle, unloadProfile }
+  { loadAuthorArticle, loadFavoriteArticle, unloadProfile, changeTabProfile }
 )(Profile);

@@ -50,11 +50,20 @@ const TagFilterTab = ({ tag }) => {
 class MainView extends Component {
   handleChangeTab = tab => event => {
     event.preventDefault();
-    this.props.changeTab(tab);
+    this.props.changeTab(tab, 10);
   };
 
   render() {
-    const { articles, articlesCount, currentPage, tag, currentUser, tab, pager } = this.props;
+    const {
+      articles,
+      articlesCount,
+      currentPage,
+      tag,
+      currentUser,
+      tab,
+      pager,
+      limit,
+    } = this.props;
 
     return (
       <div className="col-md-9">
@@ -75,6 +84,7 @@ class MainView extends Component {
           articlesCount={articlesCount}
           currentPage={currentPage}
           pager={pager}
+          limit={limit}
         />
       </div>
     );

@@ -44,14 +44,18 @@ export default (state = initialState, action) => {
     }
     case FOLLOW:
     case UNFOLLOW: {
-      const { profile } = payload;
-      return {
-        ...state,
-        article: {
-          ...state.article,
-          author: profile,
-        },
-      };
+      const { pageName } = action;
+      if (pageName === ARTICLE_PAGE) {
+        const { profile } = payload;
+        return {
+          ...state,
+          article: {
+            ...state.article,
+            author: profile,
+          },
+        };
+      }
+      return state;
     }
     case DELETE_COMMENT: {
       const { id } = action;

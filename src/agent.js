@@ -21,32 +21,23 @@ const setToken = _token => {
   token = _token;
 };
 
-// const makeRequest = (method, url) =>
-//   superagent[method](url)
-//     .use(tokenPlugin)
-//     .then(responseBody);
+const request = (method, url, body = null) => {
+  if (body) {
+    return superagent[method](`${API_ROOT}${url}`, body)
+      .use(tokenPlugin)
+      .then(responseBody);
+  }
+
+  return superagent[method](`${API_ROOT}${url}`)
+    .use(tokenPlugin)
+    .then(responseBody);
+};
 
 const requests = {
-  get: url =>
-    superagent
-      .get(`${API_ROOT}${url}`)
-      .use(tokenPlugin)
-      .then(responseBody),
-  post: (url, body) =>
-    superagent
-      .post(`${API_ROOT}${url}`, body)
-      .use(tokenPlugin)
-      .then(responseBody),
-  put: (url, body) =>
-    superagent
-      .put(`${API_ROOT}${url}`, body)
-      .use(tokenPlugin)
-      .then(responseBody),
-  delete: url =>
-    superagent
-      .del(`${API_ROOT}${url}`)
-      .use(tokenPlugin)
-      .then(responseBody),
+  get: url => request('get', url),
+  post: (url, body) => request('post', url, body),
+  put: (url, body) => request('put', url, body),
+  delete: url => request('del', url),
 };
 
 const Auth = {
@@ -72,12 +63,14 @@ const omitSlug = article => ({ ...article, slug: undefined });
 const limit = (count, page) => `limit=${count}&offset=${page ? page * count : 0}`;
 
 const Articles = {
-  all: page => requests.get(`/articles?${limit(10, page)}`),
-  byAuthor: author => page => requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
-  byTag: tag => page => requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
-  favoritedBy: author => page =>
-    requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
-  feed: page => requests.get(`/articles/feed?${limit(10, page)}`),
+  all: limitCount => page => requests.get(`/articles?${limit(limitCount, page)}`),
+  byAuthor: (author, limitCount) => page =>
+    requests.get(`/articles?author=${encode(author)}&${limit(limitCount, page)}`),
+  byTag: (tag, limitCount) => page =>
+    requests.get(`/articles?tag=${encode(tag)}&${limit(limitCount, page)}`),
+  favoritedBy: (author, limitCount) => page =>
+    requests.get(`/articles?favorited=${encode(author)}&${limit(limitCount, page)}`),
+  feed: limitCount => page => requests.get(`/articles/feed?${limit(limitCount, page)}`),
   favorite: slug => requests.post(`/articles/${slug}/favorite`),
   unfavorite: slug => requests.delete(`/articles/${slug}/favorite`),
   create: article => requests.post('/articles', { article }),
