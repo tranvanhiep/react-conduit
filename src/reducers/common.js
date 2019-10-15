@@ -28,6 +28,7 @@ export default (state = initialState, action) => {
         const { user } = payload;
         return {
           ...state,
+          appLoaded: true,
           currentUser: hasError ? null : user,
         };
       }

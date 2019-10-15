@@ -7,7 +7,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import { resetRedirect } from '../actions/common';
-import { push } from 'connected-react-router';
+import { push } from 'react-router-redux';
 import agent from '../agent';
 import { loadApp } from '../actions/common';
 import Article from './Article';

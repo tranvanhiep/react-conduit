@@ -1,15 +1,17 @@
 import { createStore, applyMiddleware } from 'redux';
-import { createBrowserHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
+import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import createRootReducer from './reducer';
+import rootReducer from './reducer';
 import { promiseMiddleware, localStorageMiddleware } from './middleware';
+import { createBrowserHistory } from "history";
 
-export const history = createBrowserHistory();
+const browserHistory = createBrowserHistory();
 
-const _routerMiddleware = routerMiddleware(history);
+const _routerMiddleware = routerMiddleware(browserHistory);
 
 const getMiddleware = () =>
   applyMiddleware(_routerMiddleware, promiseMiddleware, localStorageMiddleware);
 
-export const store = createStore(createRootReducer(history), composeWithDevTools(getMiddleware()));
+export const store = createStore(rootReducer, composeWithDevTools(getMiddleware()));
+
+export const history = syncHistoryWithStore(browserHistory, store);
