@@ -39,8 +39,8 @@ const TagFilterTab = ({ tag }) => {
   }
 
   return (
-    <li class="nav-item">
-      <button class="nav-link active">
+    <li className="nav-item">
+      <button className="nav-link active">
         <i className="ion-pound"></i> {tag}
       </button>
     </li>
