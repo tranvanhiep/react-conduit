@@ -4,10 +4,9 @@ import { Link, NavLink } from 'react-router-dom';
 import { loadAuthorArticle, loadFavoriteArticle, unloadProfile } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
-import { PROFILE_PAGE } from '../constants';
 import { changeTabProfile } from '../actions/articleList';
 
-const ProfileAction = ({ currentUser, username, following }) => {
+const ProfileAction = ({ currentUser, username, following, followRequesting }) => {
   if (currentUser.username === username) {
     return (
       <Link className="btn btn-sm btn-outline-secondary action-btn" to="/settings">
@@ -16,7 +15,9 @@ const ProfileAction = ({ currentUser, username, following }) => {
       </Link>
     );
   } else {
-    return <FollowButton username={username} following={following} pageName={PROFILE_PAGE} />;
+    return (
+      <FollowButton username={username} following={following} followRequesting={followRequesting} />
+    );
   }
 };
 
@@ -83,7 +84,7 @@ class Profile extends Component {
       return null;
     }
 
-    const { username, bio, image, following } = profile;
+    const { username, bio, image, following, followRequesting } = profile;
 
     return (
       <div className="profile-page">
@@ -98,6 +99,7 @@ class Profile extends Component {
                   username={username}
                   following={following}
                   currentUser={currentUser}
+                  followRequesting={followRequesting}
                 />
               </div>
             </div>

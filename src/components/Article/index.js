@@ -20,9 +20,9 @@ class Article extends Component {
   }
 
   render() {
-    const { article } = this.props;
+    const { article, loading } = this.props;
 
-    if (!article) {
+    if (loading) {
       return null;
     }
 

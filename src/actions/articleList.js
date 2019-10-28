@@ -1,18 +1,30 @@
 import agent from '../agent';
 import {
-  CHANGE_TAB,
   SET_PAGE,
   APPLY_TAG_FILTER,
   CHANGE_TAB_PROFILE,
+  FAVORITE_ARTICLE_REQUEST,
+  FAVORITE_ARTICLE_SUCCESS,
+  FAVORITE_ARTICLE_FAILURE,
+  UNFAVORITE_ARTICLE_REQUEST,
+  UNFAVORITE_ARTICLE_SUCCESS,
+  UNFAVORITE_ARTICLE_FAILURE,
+  TAB_CHANGING,
+  TAB_CHANGE_SUCCEEDED,
+  TAB_CHANGE_FAILED,
 } from '../constants/actionTypes';
+import { fulfilHandler, rejectHandler } from '../utils';
 
-export const changeTab = (tab, limit) => ({
-  type: CHANGE_TAB,
-  payload: tab === 'feed' ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0),
-  pager: tab === 'feed' ? agent.Articles.feed(limit) : agent.Articles.all(limit),
-  tab,
-  limit,
-});
+export const changeTab = (tab, limit) => dispatch => {
+  const pager = tab === 'feed' ? agent.Articles.feed(limit) : agent.Articles.all(limit);
+  dispatch({ type: TAB_CHANGING });
+
+  const articleList = tab === 'feed' ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0);
+  return articleList.then(
+    fulfilHandler(TAB_CHANGE_SUCCEEDED, dispatch, { pager, tab, limit }),
+    rejectHandler(TAB_CHANGE_FAILED, dispatch)
+  );
+};
 
 export const setPage = (page, pager) => ({
   type: SET_PAGE,
@@ -40,3 +52,21 @@ export const changeTabProfile = (tab, username, limit) => ({
       : agent.Articles.byAuthor(username, limit),
   limit,
 });
+
+export const favoriteArticle = slug => dispatch => {
+  dispatch({ type: FAVORITE_ARTICLE_REQUEST, slug });
+
+  return agent.Articles.favorite(slug).then(
+    fulfilHandler(FAVORITE_ARTICLE_SUCCESS, dispatch),
+    rejectHandler(FAVORITE_ARTICLE_FAILURE, dispatch, { slug })
+  );
+};
+
+export const unfavoriteArticle = slug => dispatch => {
+  dispatch({ type: UNFAVORITE_ARTICLE_REQUEST });
+
+  return agent.Articles.unfavorite(slug).then(
+    fulfilHandler(UNFAVORITE_ARTICLE_SUCCESS, dispatch),
+    rejectHandler(UNFAVORITE_ARTICLE_FAILURE, dispatch)
+  );
+};

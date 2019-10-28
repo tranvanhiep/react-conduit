@@ -1,13 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import ArticlePreview from './ArticlePreview';
 import Pagination from './Pagination';
-import { ARTICLE_LIST } from '../../constants';
 
 class ArticleList extends Component {
   render() {
-    const { articles, articlesCount, currentPage, pager, limit } = this.props;
+    const {
+      articles,
+      articlesCount,
+      currentPage,
+      pager,
+      limit,
+      articleLoading,
+      loading,
+    } = this.props;
 
-    if (!articles) {
+    if (articleLoading || loading) {
       return <div className="article-preview">Loading...</div>;
     }
 
@@ -18,7 +25,7 @@ class ArticleList extends Component {
     return (
       <Fragment>
         {articles.map(article => (
-          <ArticlePreview article={article} key={article.slug} pageName={ARTICLE_LIST} />
+          <ArticlePreview article={article} key={article.slug} />
         ))}
         <Pagination
           articlesCount={articlesCount}

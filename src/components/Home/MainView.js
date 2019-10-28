@@ -63,6 +63,8 @@ class MainView extends Component {
       tab,
       pager,
       limit,
+      articleLoading,
+      loading,
     } = this.props;
 
     return (
@@ -85,6 +87,8 @@ class MainView extends Component {
           currentPage={currentPage}
           pager={pager}
           limit={limit}
+          articleLoading={articleLoading}
+          loading={loading}
         />
       </div>
     );

@@ -18,7 +18,7 @@ class Home extends Component {
   }
 
   render() {
-    const { currentUser, appName, tags, setTagFilter } = this.props;
+    const { currentUser, appName, tags, setTagFilter, tagLoading: loading } = this.props;
 
     return (
       <div className="home-page">
@@ -29,7 +29,7 @@ class Home extends Component {
             <div className="col-md-3">
               <div className="sidebar">
                 <p>Popular Tags</p>
-                <Tags tags={tags} onSelectTag={setTagFilter} />
+                <Tags tags={tags} onSelectTag={setTagFilter} loading={loading} />
               </div>
             </div>
           </div>
@@ -43,6 +43,7 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
   appName: state.common.appName,
   tags: state.articleList.tags,
+  loading: state.articleList.loading,
 });
 
 export default connect(

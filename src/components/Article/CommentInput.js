@@ -28,7 +28,7 @@ class CommentInput extends Component {
   };
 
   render() {
-    const { currentUser, commentErrors } = this.props;
+    const { currentUser, commentErrors, commentSubmitting } = this.props;
 
     if (!currentUser) {
       return (
@@ -60,7 +60,7 @@ class CommentInput extends Component {
               alt={currentUser.username}
               className="comment-author-img"
             />
-            <button className="btn btn-sm btn-primary" type="submit">
+            <button className="btn btn-sm btn-primary" type="submit" disabled={commentSubmitting}>
               Post Comment
             </button>
           </div>

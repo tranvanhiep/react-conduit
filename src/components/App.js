@@ -38,7 +38,7 @@ class App extends Component {
     if (token) {
       agent.setToken(token);
     }
-    this.props.loadApp(token);
+    this.props.loadApp();
   }
 
   render() {
