@@ -18,7 +18,7 @@ class Home extends Component {
   }
 
   render() {
-    const { currentUser, appName, tags, setTagFilter, tagLoading: loading } = this.props;
+    const { currentUser, appName, tags, setTagFilter, loading } = this.props;
 
     return (
       <div className="home-page">

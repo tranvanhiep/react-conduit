@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { loadAuthorArticle, loadFavoriteArticle, unloadProfile } from '../actions/profile';
+import { unloadProfile } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
-import { changeTabProfile } from '../actions/articleList';
+import { loadAuthorArticle } from '../actions/articleList';
 
 const ProfileAction = ({ currentUser, username, following, followRequesting }) => {
   if (currentUser.username === username) {
@@ -34,11 +34,11 @@ class Profile extends Component {
       match: {
         params: { username },
       },
-      loaded,
+      loading,
     } = props;
     const { limit } = state;
 
-    if (loaded) {
+    if (!loading) {
       const {
         profile: { username: prevUsername },
       } = props;
@@ -60,10 +60,10 @@ class Profile extends Component {
     } = this.props;
     const { limit } = this.state;
 
-    if (/.*favorites/.test(path)) {
-      this.props.loadFavoriteArticle(username, limit);
+    if (/\/favorites/.test(path)) {
+      this.props.loadAuthorArticle('favorites', username, limit);
     } else {
-      this.props.loadAuthorArticle(username, limit);
+      this.props.loadAuthorArticle('author', username, limit);
     }
   }
 
@@ -74,7 +74,7 @@ class Profile extends Component {
   onChangeTab = (tab, username) => event => {
     const { limit } = this.state;
 
-    this.props.changeTabProfile(tab, username, limit);
+    this.props.loadAuthorArticle(tab, username, limit);
   };
 
   render() {
@@ -156,5 +156,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loadAuthorArticle, loadFavoriteArticle, unloadProfile, changeTabProfile }
+  { loadAuthorArticle, unloadProfile }
 )(Profile);

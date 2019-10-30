@@ -14,7 +14,7 @@ class ArticleList extends Component {
       loading,
     } = this.props;
 
-    if (articleLoading || loading) {
+    if (articleLoading || loading || !articles) {
       return <div className="article-preview">Loading...</div>;
     }
 

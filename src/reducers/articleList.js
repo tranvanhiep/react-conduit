@@ -1,10 +1,7 @@
 import {
   HOME_PAGE_UNLOADED,
   SET_PAGE,
-  APPLY_TAG_FILTER,
-  PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
-  CHANGE_TAB_PROFILE,
   FAVORITE_ARTICLE_SUCCESS,
   UNFAVORITE_ARTICLE_SUCCESS,
   FAVORITE_ARTICLE_REQUEST,
@@ -17,6 +14,14 @@ import {
   TAB_CHANGE_SUCCEEDED,
   TAB_CHANGING,
   TAB_CHANGE_FAILED,
+  SET_PAGE_SUCCEEDED,
+  SET_PAGE_FAILED,
+  TAG_FILTER_SUCCEEDED,
+  TAG_FILTERING,
+  TAG_FILTER_FAILED,
+  AUTHOR_ARTICLE_LOAD_SUCCEEDED,
+  AUTHOR_ARTICLE_LOADING,
+  AUTHOR_ARTICLE_LOAD_FAILED,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -68,11 +73,13 @@ export default (state = initialState, action) => {
     case HOME_PAGE_UNLOADED:
     case PROFILE_PAGE_UNLOADED:
       return initialState;
+    case AUTHOR_ARTICLE_LOADING:
     case TAB_CHANGING:
       return {
         ...state,
         articleLoading: true,
       };
+    case AUTHOR_ARTICLE_LOAD_FAILED:
     case TAB_CHANGE_FAILED:
       return {
         ...state,
@@ -95,7 +102,31 @@ export default (state = initialState, action) => {
         errors: null,
       };
     }
-    case SET_PAGE: {
+    case AUTHOR_ARTICLE_LOAD_SUCCEEDED: {
+      const { articles, articlesCount } = payload;
+      const { pager, limit } = action;
+      return {
+        ...state,
+        articles,
+        articlesCount,
+        pager,
+        currentPage: 1,
+        limit,
+        articleLoading: false,
+      };
+    }
+    case SET_PAGE:
+      return {
+        ...state,
+        articleLoading: true,
+      };
+    case SET_PAGE_FAILED:
+      return {
+        ...state,
+        articleLoading: false,
+        errors,
+      };
+    case SET_PAGE_SUCCEEDED: {
       const { currentPage } = action;
       const { articles, articlesCount } = payload;
       return {
@@ -103,6 +134,8 @@ export default (state = initialState, action) => {
         articles,
         articlesCount,
         currentPage,
+        articleLoading: false,
+        errors: null,
       };
     }
     case FAVORITE_ARTICLE_REQUEST:
@@ -135,7 +168,18 @@ export default (state = initialState, action) => {
         }),
       };
     }
-    case APPLY_TAG_FILTER: {
+    case TAG_FILTERING:
+      return {
+        ...state,
+        articleLoading: true,
+      };
+    case TAG_FILTER_FAILED:
+      return {
+        ...state,
+        articleLoading: false,
+        errors,
+      };
+    case TAG_FILTER_SUCCEEDED: {
       const { pager, tag, limit } = action;
       const { articles, articlesCount } = payload;
       return {
@@ -147,30 +191,8 @@ export default (state = initialState, action) => {
         tag,
         tab: null,
         limit,
-      };
-    }
-    case PROFILE_PAGE_LOADED: {
-      const { articles, articlesCount } = payload[1];
-      const { pager, limit } = action;
-      return {
-        ...state,
-        articles,
-        articlesCount,
-        pager,
-        currentPage: 1,
-        limit,
-      };
-    }
-    case CHANGE_TAB_PROFILE: {
-      const { articles, articlesCount } = payload;
-      const { pager, limit } = action;
-      return {
-        ...state,
-        articles,
-        articlesCount,
-        pager,
-        currentPage: 1,
-        limit,
+        articleLoading: false,
+        errors: null,
       };
     }
     default:
