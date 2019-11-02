@@ -18,6 +18,7 @@ import {
   AUTHOR_ARTICLE_LOADING,
   AUTHOR_ARTICLE_LOAD_SUCCEEDED,
   AUTHOR_ARTICLE_LOAD_FAILED,
+  RESET_ARTICLE_LIST,
 } from '../constants/actionTypes';
 import { fulfilHandler, rejectHandler } from '../utils';
 
@@ -80,3 +81,5 @@ export const unfavoriteArticle = slug => dispatch => {
     rejectHandler(UNFAVORITE_ARTICLE_FAILURE, dispatch)
   );
 };
+
+export const resetArticleList = () => ({ type: RESET_ARTICLE_LIST });

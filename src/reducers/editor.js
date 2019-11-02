@@ -68,6 +68,7 @@ export default (state = initialState, action) => {
         article,
         loaded: true,
         inProgress: false,
+        errors: null,
       };
     }
     case EDITOR_PAGE_UNLOADED:

@@ -8,10 +8,7 @@ import { favoriteArticle, unfavoriteArticle } from '../../actions/articleList';
 class FavoriteButton extends Component {
   toggleFavorite = (favorited, slug) => event => {
     event.preventDefault();
-    const {
-      currentUser,
-      match: { params },
-    } = this.props;
+    const { currentUser, params } = this.props;
 
     event.currentTarget.blur();
 

@@ -20,7 +20,11 @@ class Article extends Component {
   }
 
   render() {
-    const { article, loading } = this.props;
+    const {
+      article,
+      loading,
+      match: { params },
+    } = this.props;
 
     if (loading) {
       return null;
@@ -35,7 +39,7 @@ class Article extends Component {
           <div className="container">
             <h1>{title}</h1>
             <ArticleMeta createdAt={createdAt} author={author}>
-              <ArticleActions />
+              <ArticleActions params={params} />
             </ArticleMeta>
           </div>
         </div>

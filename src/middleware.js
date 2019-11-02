@@ -1,18 +1,6 @@
 import agent from './agent';
 import { LOGOUT, LOGIN_SUCCESS, REGISTER_SUCCESS } from './constants/actionTypes';
 
-const isPromise = _promise => _promise && typeof _promise.then === 'function';
-console.log(process.env.NODE_ENV);
-
-const promiseMiddleware = store => next => action => {
-  const { payload } = action;
-  if (isPromise(payload)) {
-    payload.then(console.log);
-  }
-
-  next(action);
-};
-
 const localStorageMiddleware = store => next => action => {
   const { type, payload } = action;
 
@@ -31,4 +19,4 @@ const localStorageMiddleware = store => next => action => {
   next(action);
 };
 
-export { promiseMiddleware, localStorageMiddleware };
+export { localStorageMiddleware };

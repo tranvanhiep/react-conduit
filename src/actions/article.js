@@ -100,7 +100,7 @@ export const createArticle = article => dispatch => {
 };
 
 export const updateArticle = article => dispatch => {
-  dispatch(UPDATE_ARTICLE_REQUEST);
+  dispatch({ type: UPDATE_ARTICLE_REQUEST });
 
   return agent.Articles.update(article).then(
     fulfilHandler(UPDATE_ARTICLE_SUCCESS, dispatch),

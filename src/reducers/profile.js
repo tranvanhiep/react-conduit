@@ -13,7 +13,7 @@ import {
 
 const initialState = {
   profile: null,
-  loading: false,
+  profileLoading: true,
   followRequesting: false,
   errors: null,
 };
@@ -25,12 +25,12 @@ export default (state = initialState, action) => {
     case PROFILE_PAGE_LOADING:
       return {
         ...state,
-        loading: true,
+        profileLoading: true,
       };
     case PROFILE_PAGE_LOAD_FAILED:
       return {
         ...state,
-        loading: false,
+        profileLoading: false,
         errors,
       };
     case PROFILE_PAGE_LOAD_SUCCEEDED: {
@@ -38,7 +38,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         profile,
-        loading: false,
+        profileLoading: false,
         errors: null,
       };
     }

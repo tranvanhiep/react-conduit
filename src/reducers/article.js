@@ -27,7 +27,7 @@ import {
 } from '../constants/actionTypes';
 
 const initialState = {
-  loading: false,
+  loading: true,
   article: null,
   comments: [],
   commentErrors: null,

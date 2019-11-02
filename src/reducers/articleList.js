@@ -22,11 +22,12 @@ import {
   AUTHOR_ARTICLE_LOAD_SUCCEEDED,
   AUTHOR_ARTICLE_LOADING,
   AUTHOR_ARTICLE_LOAD_FAILED,
+  RESET_ARTICLE_LIST,
 } from '../constants/actionTypes';
 
 const initialState = {
-  loading: false,
-  articleLoading: false,
+  loading: true,
+  articleLoading: true,
   articles: null,
   articlesCount: 0,
   tab: null,
@@ -51,6 +52,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        articleLoading: false,
         errors,
       };
     case HOME_PAGE_LOAD_SUCCEEDED: {
@@ -67,6 +69,7 @@ export default (state = initialState, action) => {
         currentPage: 1,
         limit,
         loading: false,
+        articleLoading: false,
         errors: null,
       };
     }
@@ -113,6 +116,7 @@ export default (state = initialState, action) => {
         currentPage: 1,
         limit,
         articleLoading: false,
+        loading: false,
       };
     }
     case SET_PAGE:
@@ -195,6 +199,11 @@ export default (state = initialState, action) => {
         errors: null,
       };
     }
+    case RESET_ARTICLE_LIST:
+      return {
+        ...state,
+        articles: null,
+      };
     default:
       return state;
   }

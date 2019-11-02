@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import ArticlePreview from './ArticlePreview';
 import Pagination from './Pagination';
+import { connect } from 'react-redux';
 
 class ArticleList extends Component {
   render() {
@@ -14,11 +15,11 @@ class ArticleList extends Component {
       loading,
     } = this.props;
 
-    if (articleLoading || loading || !articles) {
+    if (articleLoading || loading) {
       return <div className="article-preview">Loading...</div>;
     }
 
-    if (articles.length === 0) {
+    if ((!articleLoading || !loading) && articles.length === 0) {
       return <div className="article-preview">No articles are here... yet</div>;
     }
 
@@ -38,4 +39,9 @@ class ArticleList extends Component {
   }
 }
 
-export default ArticleList;
+const mapStateToProps = state => ({ ...state.articleList });
+
+export default connect(
+  mapStateToProps,
+  null
+)(ArticleList);

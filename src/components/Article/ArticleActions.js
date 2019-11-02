@@ -19,6 +19,7 @@ class ArticleActions extends Component {
       followRequesting,
       favoriteRequesting,
       articleDeleting,
+      params,
     } = this.props;
     const {
       author: { username, following },
@@ -53,7 +54,12 @@ class ArticleActions extends Component {
           followRequesting={followRequesting}
         ></FollowButton>
         &nbsp;
-        <FavoriteButton favorited={favorited} slug={slug} favoriteRequesting={favoriteRequesting}>
+        <FavoriteButton
+          favorited={favorited}
+          slug={slug}
+          favoriteRequesting={favoriteRequesting}
+          params={params}
+        >
           {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
         </FavoriteButton>
       </Fragment>

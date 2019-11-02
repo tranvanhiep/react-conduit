@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { changeTab } from '../../actions/articleList';
+import { changeTab, resetArticleList } from '../../actions/articleList';
 import ArticleList from '../common/ArticleList';
 import cx from 'classnames';
 import { redirectToUrl } from '../../actions/common';
@@ -9,14 +9,18 @@ const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   let changeTab;
 
   if (currentUser) {
-    changeTab = () => onChangeTab('feed');
+    changeTab = onChangeTab('feed');
   } else {
     changeTab = () => redirectToUrl('/login');
   }
 
   return (
     <li className="nav-item">
-      <button className={cx('nav-link', { active: tab === 'feed' })} onClick={changeTab}>
+      <button
+        className={cx('nav-link', { active: tab === 'feed' })}
+        onClick={changeTab}
+        disabled={tab === 'feed'}
+      >
         Your Feed
       </button>
     </li>
@@ -26,7 +30,11 @@ const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
 const GlobalFeedTab = ({ tab, onChangeTab }) => {
   return (
     <li className="nav-item">
-      <button className={cx('nav-link', { active: tab === 'all' })} onClick={onChangeTab('all')}>
+      <button
+        className={cx('nav-link', { active: tab === 'all' })}
+        onClick={onChangeTab('all')}
+        disabled={tab === 'all'}
+      >
         Global Feed
       </button>
     </li>
@@ -50,22 +58,12 @@ const TagFilterTab = ({ tag }) => {
 class MainView extends Component {
   handleChangeTab = tab => event => {
     event.preventDefault();
+    this.props.resetArticleList();
     this.props.changeTab(tab, 10);
   };
 
   render() {
-    const {
-      articles,
-      articlesCount,
-      currentPage,
-      tag,
-      currentUser,
-      tab,
-      pager,
-      limit,
-      articleLoading,
-      loading,
-    } = this.props;
+    const { tag, currentUser, tab } = this.props;
 
     return (
       <div className="col-md-9">
@@ -81,15 +79,7 @@ class MainView extends Component {
             <TagFilterTab tag={tag} />
           </ul>
         </div>
-        <ArticleList
-          articles={articles}
-          articlesCount={articlesCount}
-          currentPage={currentPage}
-          pager={pager}
-          limit={limit}
-          articleLoading={articleLoading}
-          loading={loading}
-        />
+        <ArticleList />
       </div>
     );
   }
@@ -102,5 +92,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { changeTab, redirectToUrl }
+  { changeTab, redirectToUrl, resetArticleList }
 )(MainView);

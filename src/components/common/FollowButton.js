@@ -8,10 +8,7 @@ import { followProfile, unfollowProfile } from '../../actions/article';
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
     event.preventDefault();
-    const {
-      currentUser,
-      match: { params },
-    } = this.props;
+    const { currentUser, params } = this.props;
 
     event.currentTarget.blur();
 
