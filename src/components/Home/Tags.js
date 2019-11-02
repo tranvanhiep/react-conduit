@@ -8,9 +8,9 @@ class Tags extends Component {
   };
 
   render() {
-    const { tags } = this.props;
+    const { tags, loading } = this.props;
 
-    if (!tags) {
+    if (loading || !tags) {
       return <div>Loading tags...</div>;
     }
 

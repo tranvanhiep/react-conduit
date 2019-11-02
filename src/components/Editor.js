@@ -13,20 +13,17 @@ class Editor extends Component {
       body: '',
       tagInput: '',
       tagList: [],
-      ready: false,
+      isReady: false,
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { loaded } = props;
-    const { ready } = state;
+    const { loaded, article } = props;
+    const { isReady } = state;
 
-    if (loaded && !ready) {
-      const {
-        article: { title, description, body, tagList },
-      } = props;
-
-      return { title, description, body, tagList, ready: true };
+    if (loaded && !isReady) {
+      const { title, description, body, tagList } = article;
+      return { title, description, body, tagList, isReady: true };
     }
 
     return null;
@@ -41,8 +38,6 @@ class Editor extends Component {
 
     if (slug) {
       this.props.loadEditor(slug);
-    } else {
-      this.setState(state => ({ ...state, ready: true }));
     }
   }
 

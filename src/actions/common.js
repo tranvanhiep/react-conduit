@@ -1,12 +1,27 @@
 import agent from '../agent';
-import { RESET_REDIRECT, APP_LOAD, REDIRECT_TO } from '../constants/actionTypes';
+import {
+  RESET_REDIRECT,
+  APP_LOAD,
+  REDIRECT_TO,
+  CURRENT_USER_REQUEST,
+  CURRENT_USER_SUCCESS,
+  CURRENT_USER_FAILURE,
+} from '../constants/actionTypes';
+import { fulfilHandler, rejectHandler } from '../utils';
 
 export const redirectToUrl = path => ({ type: REDIRECT_TO, payload: path });
 
 export const resetRedirect = () => ({ type: RESET_REDIRECT });
 
-export const loadApp = token => ({
-  type: APP_LOAD,
-  payload: token ? agent.Auth.current() : null,
-  token: token ? token : null,
-});
+export const loadApp = () => dispatch => {
+  dispatch({ type: CURRENT_USER_REQUEST });
+
+  return agent.Auth.current()
+    .then(
+      fulfilHandler(CURRENT_USER_SUCCESS, dispatch),
+      rejectHandler(CURRENT_USER_FAILURE, dispatch)
+    )
+    .finally(() => {
+      dispatch({ type: APP_LOAD });
+    });
+};

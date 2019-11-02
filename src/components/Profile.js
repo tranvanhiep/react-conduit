@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { loadAuthorArticle, loadFavoriteArticle, unloadProfile } from '../actions/profile';
+import { unloadProfile, loadProfilePage } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
-import { PROFILE_PAGE } from '../constants';
-import { changeTabProfile } from '../actions/articleList';
+import { loadAuthorArticle, resetArticleList } from '../actions/articleList';
 
-const ProfileAction = ({ currentUser, username, following }) => {
-  if (currentUser.username === username) {
+const ProfileAction = ({ currentUser, username, following, followRequesting, params }) => {
+  if (currentUser && currentUser.username === username) {
     return (
       <Link className="btn btn-sm btn-outline-secondary action-btn" to="/settings">
         <i className="ion-gear-a"></i>
@@ -16,7 +15,14 @@ const ProfileAction = ({ currentUser, username, following }) => {
       </Link>
     );
   } else {
-    return <FollowButton username={username} following={following} pageName={PROFILE_PAGE} />;
+    return (
+      <FollowButton
+        username={username}
+        following={following}
+        followRequesting={followRequesting}
+        params={params}
+      />
+    );
   }
 };
 
@@ -32,18 +38,23 @@ class Profile extends Component {
     const {
       match: {
         params: { username },
+        path,
       },
-      loaded,
+      profileLoading,
+      profile,
     } = props;
     const { limit } = state;
 
-    if (loaded) {
-      const {
-        profile: { username: prevUsername },
-      } = props;
+    if (!profileLoading && profile) {
+      const { username: prevUsername } = profile;
 
       if (username !== prevUsername) {
-        props.loadAuthorArticle(username, limit);
+        props.loadProfilePage(username);
+      }
+      if (/\/favorites/.test(path)) {
+        props.loadAuthorArticle('favorites', username, limit);
+      } else {
+        props.loadAuthorArticle('author', username, limit);
       }
     }
 
@@ -57,33 +68,44 @@ class Profile extends Component {
         path,
       },
     } = this.props;
-    const { limit } = this.state;
 
-    if (/.*favorites/.test(path)) {
-      this.props.loadFavoriteArticle(username, limit);
-    } else {
-      this.props.loadAuthorArticle(username, limit);
-    }
+    this.props.loadProfilePage(username);
+    this.loadArticleList(path, username);
   }
 
   componentWillUnmount() {
     this.props.unloadProfile();
   }
 
+  loadArticleList(path, username) {
+    const { limit } = this.state;
+    if (/\/favorites/.test(path)) {
+      this.props.loadAuthorArticle('favorites', username, limit);
+    } else {
+      this.props.loadAuthorArticle('author', username, limit);
+    }
+  }
+
   onChangeTab = (tab, username) => event => {
     const { limit } = this.state;
 
-    this.props.changeTabProfile(tab, username, limit);
+    this.props.resetArticleList();
+    this.props.loadAuthorArticle(tab, username, limit);
   };
 
   render() {
-    const { profile, currentUser, articles, articlesCount, currentPage, pager, limit } = this.props;
+    const {
+      profile,
+      profileLoading,
+      currentUser,
+      match: { params },
+    } = this.props;
 
-    if (!profile) {
+    if (profileLoading || !profile) {
       return null;
     }
 
-    const { username, bio, image, following } = profile;
+    const { username, bio, image, following, followRequesting } = profile;
 
     return (
       <div className="profile-page">
@@ -98,6 +120,8 @@ class Profile extends Component {
                   username={username}
                   following={following}
                   currentUser={currentUser}
+                  followRequesting={followRequesting}
+                  params={params}
                 />
               </div>
             </div>
@@ -131,13 +155,7 @@ class Profile extends Component {
                   </li>
                 </ul>
               </div>
-              <ArticleList
-                articles={articles}
-                articlesCount={articlesCount}
-                currentPage={currentPage}
-                pager={pager}
-                limit={limit}
-              />
+              <ArticleList />
             </div>
           </div>
         </div>
@@ -149,10 +167,9 @@ class Profile extends Component {
 const mapStateToProps = state => ({
   ...state.profile,
   currentUser: state.common.currentUser,
-  ...state.articleList,
 });
 
 export default connect(
   mapStateToProps,
-  { loadAuthorArticle, loadFavoriteArticle, unloadProfile, changeTabProfile }
+  { loadAuthorArticle, unloadProfile, loadProfilePage, resetArticleList }
 )(Profile);

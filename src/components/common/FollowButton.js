@@ -3,19 +3,28 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import { follow, unfollow } from '../../actions/profile';
 import { redirectToUrl } from '../../actions/common';
+import { followProfile, unfollowProfile } from '../../actions/article';
 
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
     event.preventDefault();
-    const { currentUser, pageName } = this.props;
+    const { currentUser, params } = this.props;
 
     event.currentTarget.blur();
 
     if (currentUser) {
-      if (following) {
-        this.props.unfollow(username, pageName);
+      if (params && params.username) {
+        if (following) {
+          this.props.unfollow(username);
+        } else {
+          this.props.follow(username);
+        }
       } else {
-        this.props.follow(username, pageName);
+        if (following) {
+          this.props.unfollowProfile(username);
+        } else {
+          this.props.followProfile(username);
+        }
       }
     } else {
       this.props.redirectToUrl('/login');
@@ -23,7 +32,7 @@ class FollowButton extends Component {
   };
 
   render() {
-    const { username, following } = this.props;
+    const { username, following, followRequesting } = this.props;
 
     return (
       <button
@@ -32,6 +41,7 @@ class FollowButton extends Component {
           'btn-secondary': following,
         })}
         onClick={this.toggleFollow(following, username)}
+        disabled={followRequesting}
       >
         <i className="ion-plus-round"></i>
         &nbsp; {following ? 'Unfollow' : 'Follow'} {username}
@@ -46,5 +56,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { follow, unfollow, redirectToUrl }
+  { follow, unfollow, redirectToUrl, followProfile, unfollowProfile }
 )(FollowButton);

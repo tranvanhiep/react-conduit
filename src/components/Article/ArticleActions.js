@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { deleteArticle } from '../../actions/article';
 import FavoriteButton from '../common/FavoriteButton';
 import FollowButton from '../common/FollowButton';
-import { ARTICLE_PAGE } from '../../constants';
 
 class ArticleActions extends Component {
   delete = slug => event => {
@@ -14,7 +13,14 @@ class ArticleActions extends Component {
   };
 
   render() {
-    const { currentUser, article } = this.props;
+    const {
+      currentUser,
+      article,
+      followRequesting,
+      favoriteRequesting,
+      articleDeleting,
+      params,
+    } = this.props;
     const {
       author: { username, following },
       favorited,
@@ -29,7 +35,11 @@ class ArticleActions extends Component {
             <i className="ion-edit"></i> Edit Article
           </Link>
           &nbsp;
-          <button className="btn btn-outline-danger btn-sm" onClick={this.delete(slug)}>
+          <button
+            className="btn btn-outline-danger btn-sm"
+            onClick={this.delete(slug)}
+            disabled={articleDeleting}
+          >
             <i className="ion-trash-a"></i> Delete Article
           </button>
         </Fragment>
@@ -41,10 +51,15 @@ class ArticleActions extends Component {
         <FollowButton
           username={username}
           following={following}
-          pageName={ARTICLE_PAGE}
+          followRequesting={followRequesting}
         ></FollowButton>
         &nbsp;
-        <FavoriteButton favorited={favorited} slug={slug} pageName={ARTICLE_PAGE}>
+        <FavoriteButton
+          favorited={favorited}
+          slug={slug}
+          favoriteRequesting={favoriteRequesting}
+          params={params}
+        >
           {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
         </FavoriteButton>
       </Fragment>

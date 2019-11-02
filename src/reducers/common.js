@@ -1,14 +1,16 @@
 import {
   APP_LOAD,
-  LOGIN,
-  REGISTER,
   RESET_REDIRECT,
-  DELETE_ARTICLE,
   REDIRECT_TO,
   LOGOUT,
-  UPDATE_USER,
-  CREATE_ARTICLE,
-  UPDATE_ARTICLE,
+  LOGIN_SUCCESS,
+  REGISTER_SUCCESS,
+  CURRENT_USER_SUCCESS,
+  CURRENT_USER_FAILURE,
+  UPDATE_USER_SUCCESS,
+  CREATE_ARTICLE_SUCCESS,
+  UPDATE_ARTICLE_SUCCESS,
+  DELETE_ARTICLE_SUCCESS,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -22,29 +24,31 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case APP_LOAD: {
-      if (payload) {
-        const { hasError } = action;
-        const { user } = payload;
-        return {
-          ...state,
-          appLoaded: true,
-          currentUser: hasError ? null : user,
-        };
-      }
+    case APP_LOAD:
       return {
         ...state,
         appLoaded: true,
       };
+    case CURRENT_USER_SUCCESS: {
+      const { user: currentUser } = payload;
+      return {
+        ...state,
+        currentUser,
+      };
     }
-    case LOGIN:
-    case REGISTER: {
-      const { hasError } = action;
+    case CURRENT_USER_FAILURE: {
+      return {
+        ...state,
+        currentUser: null,
+      };
+    }
+    case LOGIN_SUCCESS:
+    case REGISTER_SUCCESS: {
       const { user } = payload;
       return {
         ...state,
-        redirectTo: hasError ? null : '/',
-        currentUser: hasError ? null : user,
+        redirectTo: '/',
+        currentUser: user,
       };
     }
     case LOGOUT:
@@ -54,36 +58,35 @@ export default (state = initialState, action) => {
         redirectTo: '/',
       };
     case REDIRECT_TO:
-      return { ...state, redirectTo: payload };
+      return {
+        ...state,
+        redirectTo: payload,
+      };
     case RESET_REDIRECT:
-      return { ...state, redirectTo: null };
-    case DELETE_ARTICLE: {
-      const { hasError } = action;
-      return { ...state, redirectTo: hasError ? null : '/' };
-    }
-    case UPDATE_USER: {
+      return {
+        ...state,
+        redirectTo: null,
+      };
+    case DELETE_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        redirectTo: '/',
+      };
+    case UPDATE_USER_SUCCESS: {
       const { user } = payload;
-      const { hasError } = action;
-      if (!hasError) {
-        const { username } = user;
-        return {
-          ...state,
-          currentUser: user,
-          redirectTo: `/profile/${username}`,
-        };
-      }
-      return state;
+      const { username } = user;
+      return {
+        ...state,
+        currentUser: user,
+        redirectTo: `/profile/${username}`,
+      };
     }
-    case CREATE_ARTICLE:
-    case UPDATE_ARTICLE: {
-      const { hasError } = action;
-      if (!hasError) {
-        const {
-          article: { slug },
-        } = payload;
-        return { ...state, redirectTo: `/article/${slug}` };
-      }
-      return state;
+    case CREATE_ARTICLE_SUCCESS:
+    case UPDATE_ARTICLE_SUCCESS: {
+      const {
+        article: { slug },
+      } = payload;
+      return { ...state, redirectTo: `/article/${slug}` };
     }
     default:
       return state;

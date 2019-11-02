@@ -3,19 +3,28 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import { favorite, unfavorite } from '../../actions/article';
 import { redirectToUrl } from '../../actions/common';
+import { favoriteArticle, unfavoriteArticle } from '../../actions/articleList';
 
 class FavoriteButton extends Component {
-  toggleFavorite = (favorited, slug, pageName) => event => {
+  toggleFavorite = (favorited, slug) => event => {
     event.preventDefault();
-    const { currentUser } = this.props;
+    const { currentUser, params } = this.props;
 
     event.currentTarget.blur();
 
     if (currentUser) {
-      if (favorited) {
-        this.props.unfavorite(slug, pageName);
+      if (params && params.slug) {
+        if (favorited) {
+          this.props.unfavorite(slug);
+        } else {
+          this.props.favorite(slug);
+        }
       } else {
-        this.props.favorite(slug, pageName);
+        if (favorited) {
+          this.props.unfavoriteArticle(slug);
+        } else {
+          this.props.favoriteArticle(slug);
+        }
       }
     } else {
       this.props.redirectToUrl('/login');
@@ -23,7 +32,7 @@ class FavoriteButton extends Component {
   };
 
   render() {
-    const { favorited, slug, children, pageName } = this.props;
+    const { favorited, slug, children, favoriteRequesting } = this.props;
 
     return (
       <button
@@ -32,7 +41,8 @@ class FavoriteButton extends Component {
           { 'btn-primary': favorited },
           { 'btn-outline-primary': !favorited }
         )}
-        onClick={this.toggleFavorite(favorited, slug, pageName)}
+        onClick={this.toggleFavorite(favorited, slug)}
+        disabled={favoriteRequesting}
       >
         {children}
       </button>
@@ -46,5 +56,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { favorite, unfavorite, redirectToUrl }
+  { favorite, unfavorite, favoriteArticle, unfavoriteArticle, redirectToUrl }
 )(FavoriteButton);

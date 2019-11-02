@@ -1,8 +1,9 @@
 import {
   SETTINGS_PAGE_LOADED,
   SETTINGS_PAGE_UNLOADED,
-  ASYNC_START,
-  UPDATE_USER,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILURE,
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  const { type, payload } = action;
+  const { type, errors } = action;
 
   switch (type) {
     case SETTINGS_PAGE_LOADED:
@@ -23,23 +24,25 @@ export default (state = initialState, action) => {
       };
     case SETTINGS_PAGE_UNLOADED:
       return initialState;
-    case ASYNC_START: {
-      const { subType } = action;
-      if (subType === UPDATE_USER) {
-        return { ...state, inProgress: true };
-      }
-      return state;
-    }
-    case UPDATE_USER: {
-      const { hasError } = action;
-      const { errors } = payload;
+    case UPDATE_USER_REQUEST:
       return {
         ...state,
-        errors: hasError ? errors : null,
-        submitted: !hasError,
-        inProgress: false,
+        inProgress: true,
       };
-    }
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        errors: null,
+        inProgress: false,
+        submitted: true,
+      };
+    case UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        errors,
+        inProgress: false,
+        submitted: false,
+      };
     default:
       return state;
   }

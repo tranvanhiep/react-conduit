@@ -10,22 +10,23 @@ class DeleteButton extends Component {
     this.props.deleteComment(slug, id);
   };
   render() {
-    const { username, currentUser } = this.props;
+    const { username, currentUser, commentDeleting } = this.props;
 
     if (!currentUser || username !== currentUser.username) {
       return null;
     }
 
     return (
-      <span className="mod-options" onClick={this.deleteComment}>
+      <button className="mod-options" onClick={this.deleteComment} disabled={commentDeleting}>
         <i className="ion-trash-a"></i>
-      </span>
+      </button>
     );
   }
 }
 
 const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
+  commentDeleting: state.article.commentDeleting,
 });
 
 export default connect(
