@@ -35,24 +35,6 @@ class Profile extends Component {
     };
   }
 
-  componentDidMount() {
-    const {
-      match: {
-        params: { username },
-        path,
-      },
-    } = this.props;
-    const { limit } = this.state;
-
-    this.props.loadProfilePage(username);
-
-    if (/\/favorites/.test(path)) {
-      this.props.loadAuthorArticle(FAVORITE_ARTICLES, username, limit);
-    } else {
-      this.props.loadAuthorArticle(AUTHOR_ARTICLES, username, limit);
-    }
-  }
-
   static getDerivedStateFromProps(props, state) {
     const {
       match: {
@@ -78,6 +60,24 @@ class Profile extends Component {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const {
+      match: {
+        params: { username },
+        path,
+      },
+    } = this.props;
+    const { limit } = this.state;
+
+    this.props.loadProfilePage(username);
+
+    if (/\/favorites/.test(path)) {
+      this.props.loadAuthorArticle(FAVORITE_ARTICLES, username, limit);
+    } else {
+      this.props.loadAuthorArticle(AUTHOR_ARTICLES, username, limit);
+    }
   }
 
   componentWillUnmount() {
