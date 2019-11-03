@@ -6,9 +6,8 @@ import cx from 'classnames';
 class Pagination extends Component {
   setPage = page => event => {
     event.preventDefault();
-    const { pager } = this.props;
 
-    this.props.setPage(page, pager);
+    this.props.setPage(page);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
@@ -36,7 +35,13 @@ class Pagination extends Component {
   }
 }
 
+const mapStateToProps = ({ articleList }) => ({
+  articlesCount: articleList.articlesCount,
+  currentPage: articleList.currentPage,
+  limit: articleList.limit,
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { setPage }
 )(Pagination);

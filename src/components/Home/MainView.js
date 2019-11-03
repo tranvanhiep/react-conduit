@@ -4,12 +4,13 @@ import { changeTab, resetArticleList } from '../../actions/articleList';
 import ArticleList from '../common/ArticleList';
 import cx from 'classnames';
 import { redirectToUrl } from '../../actions/common';
+import { FEED_ARTICLES, ALL_ARTICLES } from '../../constants/constants';
 
 const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   let changeTab;
 
   if (currentUser) {
-    changeTab = onChangeTab('feed');
+    changeTab = onChangeTab(FEED_ARTICLES);
   } else {
     changeTab = () => redirectToUrl('/login');
   }
@@ -17,9 +18,9 @@ const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: tab === 'feed' })}
+        className={cx('nav-link', { active: tab === FEED_ARTICLES })}
         onClick={changeTab}
-        disabled={tab === 'feed'}
+        disabled={tab === FEED_ARTICLES}
       >
         Your Feed
       </button>
@@ -31,9 +32,9 @@ const GlobalFeedTab = ({ tab, onChangeTab }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: tab === 'all' })}
-        onClick={onChangeTab('all')}
-        disabled={tab === 'all'}
+        className={cx('nav-link', { active: tab === ALL_ARTICLES })}
+        onClick={onChangeTab(ALL_ARTICLES)}
+        disabled={tab === ALL_ARTICLES}
       >
         Global Feed
       </button>

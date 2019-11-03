@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from './Header';
 import Footer from './Footer';
@@ -21,8 +21,8 @@ class App extends Component {
     this.state = {};
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    const { redirectTo, dispatch, resetRedirect } = nextProps;
+  static getDerivedStateFromProps(props) {
+    const { redirectTo, dispatch, resetRedirect } = props;
 
     if (redirectTo) {
       dispatch(push(redirectTo));
@@ -60,9 +60,9 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/article/:slug" component={Article} />
-          <Route path="/editor/:slug" component={Editor} />
-          <Route path="/editor" component={Editor} />
-          <Route path="/settings" component={Settings} />
+          <Route path="/editor/:slug">{currentUser ? <Editor /> : <Redirect to="/" />}</Route>
+          <Route path="/editor">{currentUser ? <Editor /> : <Redirect to="/" />}</Route>
+          <Route path="/settings">{currentUser ? <Settings /> : <Redirect to="/" />}</Route>
           <Route path="/profile/:username/favorites" component={Profile} />
           <Route path="/profile/:username" component={Profile} />
         </Switch>

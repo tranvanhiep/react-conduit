@@ -5,12 +5,13 @@ import { setTagFilter } from '../../actions/articleList';
 import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';
+import { FEED_ARTICLES, ALL_ARTICLES } from '../../constants/constants';
 
 class Home extends Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    this.props.loadHomePage(currentUser ? 'feed' : 'all', 10);
+    this.props.loadHomePage(currentUser ? FEED_ARTICLES : ALL_ARTICLES, 10);
   }
 
   componentWillUnmount() {
