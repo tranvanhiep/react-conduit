@@ -21,19 +21,24 @@ import {
   RESET_ARTICLE_LIST,
 } from '../constants/actionTypes';
 import { fulfilHandler, rejectHandler } from '../utils';
+import { FEED_ARTICLES, FAVORITE_ARTICLES } from '../constants/constants';
 
 export const changeTab = (tab, limit) => dispatch => {
-  const pager = tab === 'feed' ? agent.Articles.feed(limit) : agent.Articles.all(limit);
+  const pager = tab === FEED_ARTICLES ? agent.Articles.feed(limit) : agent.Articles.all(limit);
   dispatch({ type: TAB_CHANGING });
 
-  const articleList = tab === 'feed' ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0);
+  const articleList =
+    tab === FEED_ARTICLES ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0);
   return articleList.then(
     fulfilHandler(TAB_CHANGE_SUCCEEDED, dispatch, { pager, tab, limit }),
     rejectHandler(TAB_CHANGE_FAILED, dispatch)
   );
 };
 
-export const setPage = (page, pager) => dispatch => {
+export const setPage = page => (dispatch, getState) => {
+  const {
+    articleList: { pager },
+  } = getState();
   dispatch({ type: SET_PAGE });
 
   return pager(page).then(
@@ -54,7 +59,7 @@ export const setTagFilter = (tag, pager, limit) => dispatch => {
 export const loadAuthorArticle = (tab, username, limit) => dispatch => {
   dispatch({ type: AUTHOR_ARTICLE_LOADING });
   const pager =
-    tab === 'favorites'
+    tab === FAVORITE_ARTICLES
       ? agent.Articles.favoritedBy(username, limit)
       : agent.Articles.byAuthor(username, limit);
 

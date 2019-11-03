@@ -5,6 +5,7 @@ import { unloadProfile, loadProfilePage } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
 import { loadAuthorArticle, resetArticleList } from '../actions/articleList';
+import { FAVORITE_ARTICLES, AUTHOR_ARTICLES } from '../constants/constants';
 
 const ProfileAction = ({ currentUser, username, following, followRequesting, params }) => {
   if (currentUser && currentUser.username === username) {
@@ -34,6 +35,24 @@ class Profile extends Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      match: {
+        params: { username },
+        path,
+      },
+    } = this.props;
+    const { limit } = this.state;
+
+    this.props.loadProfilePage(username);
+
+    if (/\/favorites/.test(path)) {
+      this.props.loadAuthorArticle(FAVORITE_ARTICLES, username, limit);
+    } else {
+      this.props.loadAuthorArticle(AUTHOR_ARTICLES, username, limit);
+    }
+  }
+
   static getDerivedStateFromProps(props, state) {
     const {
       match: {
@@ -50,40 +69,19 @@ class Profile extends Component {
 
       if (username !== prevUsername) {
         props.loadProfilePage(username);
-      }
-      if (/\/favorites/.test(path)) {
-        props.loadAuthorArticle('favorites', username, limit);
-      } else {
-        props.loadAuthorArticle('author', username, limit);
+        if (/\/favorites/.test(path)) {
+          props.loadAuthorArticle('favorites', username, limit);
+        } else {
+          props.loadAuthorArticle('author', username, limit);
+        }
       }
     }
 
     return null;
   }
 
-  componentDidMount() {
-    const {
-      match: {
-        params: { username },
-        path,
-      },
-    } = this.props;
-
-    this.props.loadProfilePage(username);
-    this.loadArticleList(path, username);
-  }
-
   componentWillUnmount() {
     this.props.unloadProfile();
-  }
-
-  loadArticleList(path, username) {
-    const { limit } = this.state;
-    if (/\/favorites/.test(path)) {
-      this.props.loadAuthorArticle('favorites', username, limit);
-    } else {
-      this.props.loadAuthorArticle('author', username, limit);
-    }
   }
 
   onChangeTab = (tab, username) => event => {
@@ -139,7 +137,7 @@ class Profile extends Component {
                       exact
                       to={`/profile/${username}`}
                       activeClassName="active"
-                      onClick={this.onChangeTab('author', username)}
+                      onClick={this.onChangeTab(AUTHOR_ARTICLES, username)}
                     >
                       My Articles
                     </NavLink>
@@ -148,7 +146,7 @@ class Profile extends Component {
                     <NavLink
                       className="nav-link"
                       to={`/profile/${username}/favorites`}
-                      onClick={this.onChangeTab('favorites', username)}
+                      onClick={this.onChangeTab(FAVORITE_ARTICLES, username)}
                     >
                       Favorited Articles
                     </NavLink>

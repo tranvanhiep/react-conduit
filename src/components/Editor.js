@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { createArticle, updateArticle } from '../actions/article';
 import ErrorsList from './common/ErrorsList';
 import { unloadEditor, loadEditor } from '../actions/editor';
@@ -30,13 +31,12 @@ class Editor extends Component {
   }
 
   componentDidMount() {
-    const {
-      match: {
-        params: { slug },
-      },
-    } = this.props;
+    const { match } = this.props;
 
-    if (slug) {
+    if (match && match.params && match.params.slug) {
+      const {
+        params: { slug },
+      } = match;
       this.props.loadEditor(slug);
     }
   }
@@ -179,4 +179,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { createArticle, updateArticle, unloadEditor, loadEditor }
-)(Editor);
+)(withRouter(Editor));

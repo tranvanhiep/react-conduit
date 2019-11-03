@@ -5,15 +5,7 @@ import { connect } from 'react-redux';
 
 class ArticleList extends Component {
   render() {
-    const {
-      articles,
-      articlesCount,
-      currentPage,
-      pager,
-      limit,
-      articleLoading,
-      loading,
-    } = this.props;
+    const { articles, articleLoading, loading } = this.props;
 
     if (articleLoading || loading) {
       return <div className="article-preview">Loading...</div>;
@@ -28,12 +20,7 @@ class ArticleList extends Component {
         {articles.map(article => (
           <ArticlePreview article={article} key={article.slug} />
         ))}
-        <Pagination
-          articlesCount={articlesCount}
-          currentPage={currentPage}
-          pager={pager}
-          limit={limit}
-        />
+        <Pagination />
       </Fragment>
     );
   }
