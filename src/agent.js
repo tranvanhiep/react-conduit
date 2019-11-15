@@ -1,43 +1,47 @@
-import superagentPromise from 'superagent-promise';
-import _superagent from 'superagent';
-
-const superagent = superagentPromise(_superagent, global.Promise);
+import fetch from 'cross-fetch';
 
 const API_ROOT = 'https://conduit.productionready.io/api';
 
 const encode = encodeURIComponent;
 
-const responseBody = res => res.body;
-
 let token = null;
-
-const tokenPlugin = req => {
-  if (token) {
-    req.set('Authorization', `Token ${token}`);
-  }
-};
 
 const setToken = _token => {
   token = _token;
 };
 
-const request = (method, url, body = null) => {
-  if (body) {
-    return superagent[method](`${API_ROOT}${url}`, body)
-      .use(tokenPlugin)
-      .then(responseBody);
+const destroyToken = () => {
+  token = null;
+};
+
+const options = (method, body = null) => {
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    Object.assign(headers, { Authorization: `Token ${token}` });
   }
 
-  return superagent[method](`${API_ROOT}${url}`)
-    .use(tokenPlugin)
-    .then(responseBody);
+  if (body) {
+    return { method, headers, body: JSON.stringify(body) };
+  }
+
+  return { method, headers };
+};
+
+const responseFn = async res => {
+  const json = await res.json();
+  if (res.ok) {
+    return json;
+  } else {
+    throw json;
+  }
 };
 
 const requests = {
-  get: url => request('get', url),
-  post: (url, body) => request('post', url, body),
-  put: (url, body) => request('put', url, body),
-  delete: url => request('del', url),
+  get: url => fetch(`${API_ROOT}${url}`, options('GET')).then(responseFn),
+  post: (url, body) => fetch(`${API_ROOT}${url}`, options('POST', body)).then(responseFn),
+  put: (url, body) => fetch(`${API_ROOT}${url}`, options('PUT', body)).then(responseFn),
+  delete: url => fetch(`${API_ROOT}${url}`, options('DELETE')).then(responseFn)
 };
 
 const Auth = {
@@ -45,17 +49,17 @@ const Auth = {
   login: (email, password) => requests.post('/users/login', { user: { email, password } }),
   register: (username, email, password) =>
     requests.post('/users', { user: { username, email, password } }),
-  update: user => requests.put('/user', { user }),
+  update: user => requests.put('/user', { user })
 };
 
 const Profiles = {
   get: username => requests.get(`/profiles/${encode(username)}`),
   follow: username => requests.post(`/profiles/${encode(username)}/follow`),
-  unfollow: username => requests.delete(`/profiles/${encode(username)}/follow`),
+  unfollow: username => requests.delete(`/profiles/${encode(username)}/follow`)
 };
 
 const Tags = {
-  getAll: () => requests.get('/tags'),
+  getAll: () => requests.get('/tags')
 };
 
 const omitSlug = article => ({ ...article, slug: undefined });
@@ -76,13 +80,13 @@ const Articles = {
   create: article => requests.post('/articles', { article }),
   get: slug => requests.get(`/articles/${slug}`),
   update: article => requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
-  delete: slug => requests.delete(`/articles/${slug}`),
+  delete: slug => requests.delete(`/articles/${slug}`)
 };
 
 const Comments = {
   get: slug => requests.get(`/articles/${slug}/comments`),
   create: (slug, comment) => requests.post(`/articles/${slug}/comments`, { comment }),
-  delele: (slug, id) => requests.delete(`/articles/${slug}/comments/${id}`),
+  delele: (slug, id) => requests.delete(`/articles/${slug}/comments/${id}`)
 };
 
-export default { Auth, Profiles, Tags, Articles, Comments, setToken };
+export default { Auth, Profiles, Tags, Articles, Comments, setToken, destroyToken };

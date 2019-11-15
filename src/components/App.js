@@ -14,6 +14,7 @@ import Article from './Article';
 import Editor from './Editor';
 import Settings from './Settings';
 import Profile from './Profile';
+import { TOKEN_KEY } from '../constants/constants';
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const token = window.localStorage.getItem('jwt');
+    const token = window.localStorage.getItem(TOKEN_KEY);
 
     if (token) {
       agent.setToken(token);

@@ -30,7 +30,7 @@ import {
   UNFOLLOW_PROFILE_FAILURE,
   ARTICLE_PAGE_LOADING,
   ARTICLE_PAGE_LOAD_SUCCEEDED,
-  ARTICLE_PAGE_LOAD_FAILED,
+  ARTICLE_PAGE_LOAD_FAILED
 } from '../constants/actionTypes';
 import { fulfilHandler, rejectHandler } from '../utils';
 
@@ -67,7 +67,7 @@ export const deleteComment = (slug, id) => dispatch => {
   dispatch({ type: DELETE_COMMENT_REQUEST });
 
   return agent.Comments.delele(slug, id).then(
-    fulfilHandler(DELETE_COMMENT_SUCCESS, dispatch),
+    fulfilHandler(DELETE_COMMENT_SUCCESS, dispatch, { id }),
     rejectHandler(DELETE_COMMENT_FAILURE, dispatch)
   );
 };
