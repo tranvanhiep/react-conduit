@@ -1,5 +1,6 @@
 import agent from './agent';
 import { LOGOUT, LOGIN_SUCCESS, REGISTER_SUCCESS } from './constants/actionTypes';
+import { TOKEN_KEY } from './constants/constants';
 
 const localStorageMiddleware = store => next => action => {
   const { type, payload } = action;
@@ -9,10 +10,10 @@ const localStorageMiddleware = store => next => action => {
       user: { token },
     } = payload;
 
-    window.localStorage.setItem('jwt', token);
+    window.localStorage.setItem(TOKEN_KEY, token);
     agent.setToken(token);
   } else if (type === LOGOUT) {
-    window.localStorage.removeItem('jwt');
+    window.localStorage.removeItem(TOKEN_KEY);
     agent.setToken(null);
   }
 

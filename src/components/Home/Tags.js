@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import agent from '../../agent';
+import * as cx from 'classnames';
+import styles from './tags.module.scss';
 
 class Tags extends Component {
   applyFilterTag = tag => event => {
@@ -17,7 +19,11 @@ class Tags extends Component {
     return (
       <div className="tag-list">
         {tags.map(tag => (
-          <button key={tag} className="tag-pill tag-default" onClick={this.applyFilterTag(tag)}>
+          <button
+            key={tag}
+            className={cx('tag-pill tag-default', styles['btn-tag'])}
+            onClick={this.applyFilterTag(tag)}
+          >
             {tag}
           </button>
         ))}

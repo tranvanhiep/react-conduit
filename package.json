@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
+    "cross-fetch": "^3.0.4",
     "history": "^4.9.0",
     "marked": "^0.7.0",
+    "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -16,8 +18,8 @@
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
-    "superagent": "^5.1.0",
-    "superagent-promise": "^1.1.0"
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "cross-env PORT=4100 BROWSER=none react-scripts start",
@@ -41,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^5.2.1"
+    "cross-env": "^5.2.1",
+    "postcss-normalize": "^8.0.1"
   }
 }

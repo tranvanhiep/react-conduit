@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteComment } from '../../actions/article';
+import * as cx from 'classnames';
+import styles from './deleteButton.module.scss';
 
 class DeleteButton extends Component {
   deleteComment = event => {
@@ -17,7 +19,11 @@ class DeleteButton extends Component {
     }
 
     return (
-      <button className="mod-options" onClick={this.deleteComment} disabled={commentDeleting}>
+      <button
+        className={cx('mod-options', styles['btn-delete'])}
+        onClick={this.deleteComment}
+        disabled={commentDeleting}
+      >
         <i className="ion-trash-a"></i>
       </button>
     );
