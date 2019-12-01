@@ -45,5 +45,8 @@
   "devDependencies": {
     "cross-env": "^5.2.1",
     "postcss-normalize": "^8.0.1"
+  },
+  "prettier": {
+    "trailingComma": "es5"
   }
 }
