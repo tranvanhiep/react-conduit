@@ -35,6 +35,18 @@ class Profile extends Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      match: {
+        params: { username },
+        path,
+      },
+    } = this.props;
+
+    this.props.loadProfilePage(username);
+    this.switchTab(path, username);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const {
       match: {
@@ -60,18 +72,6 @@ class Profile extends Component {
         this.switchTab(path, username);
       }
     }
-  }
-
-  componentDidMount() {
-    const {
-      match: {
-        params: { username },
-        path,
-      },
-    } = this.props;
-
-    this.props.loadProfilePage(username);
-    this.switchTab(path, username);
   }
 
   componentWillUnmount() {

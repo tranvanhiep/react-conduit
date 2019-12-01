@@ -174,6 +174,9 @@ const mapStateToProps = state => ({
   ...state.editor,
 });
 
-export default connect(mapStateToProps, { createArticle, updateArticle, unloadEditor, loadEditor })(
-  withRouter(Editor)
-);
+export default connect(mapStateToProps, {
+  createArticle,
+  updateArticle,
+  unloadEditor,
+  loadEditor,
+})(withRouter(Editor));

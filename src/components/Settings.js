@@ -136,6 +136,9 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
 });
 
-export default connect(mapStateToProps, { loadSettings, unloadSettings, updateUser, logout })(
-  Settings
-);
+export default connect(mapStateToProps, {
+  loadSettings,
+  unloadSettings,
+  updateUser,
+  logout,
+})(Settings);
