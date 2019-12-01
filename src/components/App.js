@@ -22,17 +22,6 @@ class App extends Component {
     this.state = {};
   }
 
-  static getDerivedStateFromProps(props) {
-    const { redirectTo, dispatch, resetRedirect } = props;
-
-    if (redirectTo) {
-      dispatch(push(redirectTo));
-      resetRedirect();
-    }
-
-    return null;
-  }
-
   componentDidMount() {
     const token = window.localStorage.getItem(TOKEN_KEY);
 
@@ -40,6 +29,15 @@ class App extends Component {
       agent.setToken(token);
     }
     this.props.loadApp();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { redirectTo, dispatch, resetRedirect } = this.props;
+
+    if (redirectTo) {
+      dispatch(push(redirectTo));
+      resetRedirect();
+    }
   }
 
   render() {
@@ -89,7 +87,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

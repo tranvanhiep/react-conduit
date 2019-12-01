@@ -16,22 +16,19 @@ class Settings extends Component {
     };
   }
 
-  static getDerivedStateFromProps(props) {
-    const { loaded } = props;
-
-    if (!loaded) {
-      const {
-        currentUser: { image, username, email, bio },
-      } = props;
-
-      return { image, username, email, bio };
-    }
-
-    return null;
-  }
-
   componentDidMount() {
+    const {
+      currentUser: { image, username, email, bio },
+    } = this.props;
+
     this.props.loadSettings();
+    this.setState(state => ({
+      ...state,
+      image,
+      username,
+      email,
+      bio,
+    }));
   }
 
   componentWillUnmount() {
@@ -139,7 +136,9 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { loadSettings, unloadSettings, updateUser, logout }
-)(Settings);
+export default connect(mapStateToProps, {
+  loadSettings,
+  unloadSettings,
+  updateUser,
+  logout,
+})(Settings);

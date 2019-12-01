@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { unloadProfile, loadProfilePage } from '../actions/profile';
 import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
-import { loadAuthorArticle, resetArticleList } from '../actions/articleList';
+import { loadAuthorArticle } from '../actions/articleList';
 import { FAVORITE_ARTICLES, AUTHOR_ARTICLES } from '../constants/constants';
 
 const ProfileAction = ({ currentUser, username, following, followRequesting, params }) => {
@@ -35,33 +35,6 @@ class Profile extends Component {
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const {
-      match: {
-        params: { username },
-        path,
-      },
-      profileLoading,
-      profile,
-    } = props;
-    const { limit } = state;
-
-    if (!profileLoading && profile) {
-      const { username: prevUsername } = profile;
-
-      if (username !== prevUsername) {
-        props.loadProfilePage(username);
-        if (/\/favorites/.test(path)) {
-          props.loadAuthorArticle('favorites', username, limit);
-        } else {
-          props.loadAuthorArticle('author', username, limit);
-        }
-      }
-    }
-
-    return null;
-  }
-
   componentDidMount() {
     const {
       match: {
@@ -69,14 +42,35 @@ class Profile extends Component {
         path,
       },
     } = this.props;
-    const { limit } = this.state;
 
     this.props.loadProfilePage(username);
+    this.switchTab(path, username);
+  }
 
-    if (/\/favorites/.test(path)) {
-      this.props.loadAuthorArticle(FAVORITE_ARTICLES, username, limit);
-    } else {
-      this.props.loadAuthorArticle(AUTHOR_ARTICLES, username, limit);
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      match: {
+        params: { username: prevUsername },
+        url: prevUrl,
+      },
+    } = prevProps;
+    const {
+      match: {
+        params: { username },
+        path,
+        url,
+      },
+      profileLoading,
+      profile,
+    } = this.props;
+
+    if (!profileLoading && profile) {
+      if (username !== prevUsername) {
+        this.props.loadProfilePage(username);
+      }
+      if (url !== prevUrl) {
+        this.switchTab(path, username);
+      }
     }
   }
 
@@ -84,11 +78,14 @@ class Profile extends Component {
     this.props.unloadProfile();
   }
 
-  onChangeTab = (tab, username) => event => {
+  switchTab = (path, username) => {
     const { limit } = this.state;
 
-    this.props.resetArticleList();
-    this.props.loadAuthorArticle(tab, username, limit);
+    if (/\/favorites/.test(path)) {
+      this.props.loadAuthorArticle(FAVORITE_ARTICLES, username, limit);
+    } else {
+      this.props.loadAuthorArticle(AUTHOR_ARTICLES, username, limit);
+    }
   };
 
   render() {
@@ -137,7 +134,6 @@ class Profile extends Component {
                       exact
                       to={`/profile/${username}`}
                       activeClassName="active"
-                      onClick={this.onChangeTab(AUTHOR_ARTICLES, username)}
                     >
                       My Articles
                     </NavLink>
@@ -146,7 +142,7 @@ class Profile extends Component {
                     <NavLink
                       className="nav-link"
                       to={`/profile/${username}/favorites`}
-                      onClick={this.onChangeTab(FAVORITE_ARTICLES, username)}
+                      activeClassName="active"
                     >
                       Favorited Articles
                     </NavLink>
@@ -167,7 +163,8 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { loadAuthorArticle, unloadProfile, loadProfilePage, resetArticleList }
-)(Profile);
+export default connect(mapStateToProps, {
+  loadAuthorArticle,
+  unloadProfile,
+  loadProfilePage,
+})(Profile);

@@ -14,20 +14,7 @@ class Editor extends Component {
       body: '',
       tagInput: '',
       tagList: [],
-      isReady: false,
     };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const { loaded, article } = props;
-    const { isReady } = state;
-
-    if (loaded && !isReady) {
-      const { title, description, body, tagList } = article;
-      return { title, description, body, tagList, isReady: true };
-    }
-
-    return null;
   }
 
   componentDidMount() {
@@ -37,7 +24,18 @@ class Editor extends Component {
       const {
         params: { slug },
       } = match;
-      this.props.loadEditor(slug);
+      this.props.loadEditor(slug).then(() => {
+        const {
+          article: { title, description, body, tagList },
+        } = this.props;
+        this.setState(state => ({
+          ...state,
+          title,
+          description,
+          body,
+          tagList,
+        }));
+      });
     }
   }
 
@@ -176,7 +174,9 @@ const mapStateToProps = state => ({
   ...state.editor,
 });
 
-export default connect(
-  mapStateToProps,
-  { createArticle, updateArticle, unloadEditor, loadEditor }
-)(withRouter(Editor));
+export default connect(mapStateToProps, {
+  createArticle,
+  updateArticle,
+  unloadEditor,
+  loadEditor,
+})(withRouter(Editor));
