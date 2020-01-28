@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Comment from './Comment';
+import PropTypes from 'prop-types';
 
 class CommentList extends Component {
   render() {
@@ -13,7 +14,12 @@ class CommentList extends Component {
     return (
       <Fragment>
         {comments.map(comment => (
-          <Comment comment={comment} slug={slug} currentUser={currentUser} key={comment.id} />
+          <Comment
+            comment={comment}
+            slug={slug}
+            currentUser={currentUser}
+            key={comment.id}
+          />
         ))}
       </Fragment>
     );
@@ -23,5 +29,11 @@ class CommentList extends Component {
 const mapStateToProps = state => ({
   comments: state.article.comments,
 });
+
+CommentList.propTypes = {
+  comments: PropTypes.arrayOf(PropTypes.object),
+  slug: PropTypes.string,
+  currentUser: PropTypes.object,
+};
 
 export default connect(mapStateToProps)(CommentList);

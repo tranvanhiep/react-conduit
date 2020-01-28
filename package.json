@@ -22,9 +22,10 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "cross-env PORT=4100 BROWSER=none react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env PORT=4100 BROWSER=none react-scripts test",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -43,10 +44,11 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^5.2.1",
+    "env-cmd": "^10.0.1",
     "postcss-normalize": "^8.0.1"
   },
   "prettier": {
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "printWidth": 80
   }
 }

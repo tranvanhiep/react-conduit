@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ErrorsList from '../common/ErrorsList';
 import { addComment } from '../../actions/article';
+import PropTypes from 'prop-types';
 
 class CommentInput extends Component {
   constructor(props) {
@@ -60,7 +61,11 @@ class CommentInput extends Component {
               alt={currentUser.username}
               className="comment-author-img"
             />
-            <button className="btn btn-sm btn-primary" type="submit" disabled={commentSubmitting}>
+            <button
+              className="btn btn-sm btn-primary"
+              type="submit"
+              disabled={commentSubmitting}
+            >
               Post Comment
             </button>
           </div>
@@ -76,7 +81,19 @@ const mapStateToProps = state => ({
   article: state.article.article,
 });
 
-export default connect(
-  mapStateToProps,
-  { addComment }
-)(CommentInput);
+CommentInput.propTypes = {
+  commentErrors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+  article: PropTypes.object,
+  commentSubmitting: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, { addComment })(CommentInput);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const LoggedOutView = ({ currentUser }) => {
   if (currentUser) {
@@ -52,7 +53,11 @@ const LoggedInView = ({ currentUser }) => {
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink className="nav-link" to={`/profile/${username}`} activeClassName="active">
+        <NavLink
+          className="nav-link"
+          to={`/profile/${username}`}
+          activeClassName="active"
+        >
           <img src={image} alt={username} className="user-pic" />
           {username}
         </NavLink>
@@ -78,5 +83,16 @@ class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  appName: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+};
 
 export default Header;

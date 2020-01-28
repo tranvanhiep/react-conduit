@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ErrorsList extends Component {
   render() {
@@ -19,5 +20,11 @@ class ErrorsList extends Component {
     );
   }
 }
+
+ErrorsList.propTypes = {
+  errors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
 
 export default ErrorsList;

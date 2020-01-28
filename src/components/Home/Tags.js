@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import agent from '../../agent';
 import * as cx from 'classnames';
 import styles from './tags.module.scss';
+import PropTypes from 'prop-types';
 
 class Tags extends Component {
   applyFilterTag = tag => event => {
@@ -31,5 +32,10 @@ class Tags extends Component {
     );
   }
 }
+
+Tags.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string),
+  loading: PropTypes.bool,
+};
 
 export default Tags;

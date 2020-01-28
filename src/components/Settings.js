@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ErrorsList from './common/ErrorsList';
-import { loadSettings, unloadSettings } from '../actions/settings';
-import { updateUser, logout } from '../actions/auth';
+import { loadSettings, unloadSettings, updateUser } from '../actions/settings';
+import { logout } from '../actions/auth';
+import PropTypes from 'prop-types';
 
 class Settings extends Component {
   constructor(props) {
@@ -120,7 +121,10 @@ class Settings extends Component {
 
               <hr />
 
-              <button className="btn btn-outline-danger" onClick={this.props.logout}>
+              <button
+                className="btn btn-outline-danger"
+                onClick={this.props.logout}
+              >
                 Or click here to logout.
               </button>
             </div>
@@ -135,6 +139,20 @@ const mapStateToProps = state => ({
   ...state.settings,
   currentUser: state.common.currentUser,
 });
+
+Settings.propTypes = {
+  inProgress: PropTypes.bool,
+  errors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+};
 
 export default connect(mapStateToProps, {
   loadSettings,

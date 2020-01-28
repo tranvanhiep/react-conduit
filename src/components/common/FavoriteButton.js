@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { favorite, unfavorite } from '../../actions/article';
-import { redirectToUrl } from '../../actions/common';
+import { redirectToUrl } from '../../actions/app';
 import { favoriteArticle, unfavoriteArticle } from '../../actions/articleList';
+import PropTypes from 'prop-types';
 
 class FavoriteButton extends Component {
   toggleFavorite = (favorited, slug) => event => {
@@ -54,7 +55,18 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { favorite, unfavorite, favoriteArticle, unfavoriteArticle, redirectToUrl }
-)(FavoriteButton);
+FavoriteButton.propTypes = {
+  currentUser: PropTypes.object,
+  favorited: PropTypes.bool,
+  slug: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
+  favoriteRequesting: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, {
+  favorite,
+  unfavorite,
+  favoriteArticle,
+  unfavoriteArticle,
+  redirectToUrl,
+})(FavoriteButton);

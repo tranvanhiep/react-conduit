@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setPage } from '../../actions/articleList';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
 
 class Pagination extends Component {
   setPage = page => event => {
@@ -13,7 +14,10 @@ class Pagination extends Component {
 
   render() {
     const { articlesCount, currentPage, limit } = this.props;
-    const range = Array.from(new Array(Math.ceil(articlesCount / limit)), (val, idx) => ++idx);
+    const range = Array.from(
+      new Array(Math.ceil(articlesCount / limit)),
+      (val, idx) => ++idx
+    );
 
     if (articlesCount <= limit) {
       return null;
@@ -23,7 +27,10 @@ class Pagination extends Component {
       <nav>
         <ul className="pagination">
           {range.map(page => (
-            <li className={cx('page-item', { active: page === currentPage })} key={page.toString()}>
+            <li
+              className={cx('page-item', { active: page === currentPage })}
+              key={page.toString()}
+            >
               <button className="page-link" onClick={this.setPage(page - 1)}>
                 {page}
               </button>
@@ -41,7 +48,10 @@ const mapStateToProps = ({ articleList }) => ({
   limit: articleList.limit,
 });
 
-export default connect(
-  mapStateToProps,
-  { setPage }
-)(Pagination);
+Pagination.propTypes = {
+  articlesCount: PropTypes.number,
+  currentPage: PropTypes.number,
+  limit: PropTypes.number,
+};
+
+export default connect(mapStateToProps, { setPage })(Pagination);

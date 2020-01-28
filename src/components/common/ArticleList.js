@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import ArticlePreview from './ArticlePreview';
 import Pagination from './Pagination';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class ArticleList extends Component {
   render() {
@@ -28,7 +29,10 @@ class ArticleList extends Component {
 
 const mapStateToProps = state => ({ ...state.articleList });
 
-export default connect(
-  mapStateToProps,
-  null
-)(ArticleList);
+ArticleList.propTypes = {
+  loading: PropTypes.bool,
+  articleLoading: PropTypes.bool,
+  articles: PropTypes.arrayOf(PropTypes.object),
+};
+
+export default connect(mapStateToProps, null)(ArticleList);

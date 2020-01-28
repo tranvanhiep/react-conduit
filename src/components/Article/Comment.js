@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import DeleteButton from './DeleteButton';
+import PropTypes from 'prop-types';
 
 class Comment extends Component {
   render() {
@@ -26,12 +27,19 @@ class Comment extends Component {
           <Link to={`/profile/${encodedUsername}`} className="comment-author">
             {username}
           </Link>
-          <span className="date-posted">{new Date(createdAt).toDateString()}</span>
+          <span className="date-posted">
+            {new Date(createdAt).toDateString()}
+          </span>
           <DeleteButton id={id} username={username} slug={slug} />
         </div>
       </div>
     );
   }
 }
+
+Comment.propTypes = {
+  comment: PropTypes.object,
+  slug: PropTypes.string.isRequired,
+};
 
 export default Comment;

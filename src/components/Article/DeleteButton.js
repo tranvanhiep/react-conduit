@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { deleteComment } from '../../actions/article';
 import * as cx from 'classnames';
 import styles from './deleteButton.module.scss';
+import PropTypes from 'prop-types';
 
 class DeleteButton extends Component {
   deleteComment = event => {
@@ -35,7 +36,18 @@ const mapStateToProps = state => ({
   commentDeleting: state.article.commentDeleting,
 });
 
-export default connect(
-  mapStateToProps,
-  { deleteComment }
-)(DeleteButton);
+DeleteButton.propTypes = {
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+  commentDeleting: PropTypes.bool,
+  username: PropTypes.string,
+  id: PropTypes.number,
+  slug: PropTypes.string,
+};
+
+export default connect(mapStateToProps, { deleteComment })(DeleteButton);

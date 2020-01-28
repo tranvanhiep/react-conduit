@@ -6,11 +6,22 @@ import ArticleList from './common/ArticleList';
 import FollowButton from './common/FollowButton';
 import { loadAuthorArticle } from '../actions/articleList';
 import { FAVORITE_ARTICLES, AUTHOR_ARTICLES } from '../constants/constants';
+import PropTypes from 'prop-types';
+import { redirectToUrl } from '../actions/app';
 
-const ProfileAction = ({ currentUser, username, following, followRequesting, params }) => {
+const ProfileAction = ({
+  currentUser,
+  username,
+  following,
+  followRequesting,
+  params,
+}) => {
   if (currentUser && currentUser.username === username) {
     return (
-      <Link className="btn btn-sm btn-outline-secondary action-btn" to="/settings">
+      <Link
+        className="btn btn-sm btn-outline-secondary action-btn"
+        to="/settings"
+      >
         <i className="ion-gear-a"></i>
         &nbsp; Edit Profile Settings
       </Link>
@@ -62,6 +73,7 @@ class Profile extends Component {
       },
       profileLoading,
       profile,
+      errors,
     } = this.props;
 
     if (!profileLoading && profile) {
@@ -71,6 +83,10 @@ class Profile extends Component {
       if (url !== prevUrl) {
         this.switchTab(path, username);
       }
+    }
+
+    if (errors) {
+      redirectToUrl('/');
     }
   }
 
@@ -163,8 +179,27 @@ const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
 });
 
+Profile.propTypes = {
+  profile: PropTypes.shape({
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+    following: PropTypes.bool,
+    followRequesting: PropTypes.bool,
+  }),
+  profileLoading: PropTypes.bool,
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+};
+
 export default connect(mapStateToProps, {
   loadAuthorArticle,
   unloadProfile,
   loadProfilePage,
+  redirectToUrl,
 })(Profile);
