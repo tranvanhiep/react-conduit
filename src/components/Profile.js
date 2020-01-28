@@ -176,7 +176,7 @@ class Profile extends Component {
 
 const mapStateToProps = state => ({
   ...state.profile,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
 Profile.propTypes = {

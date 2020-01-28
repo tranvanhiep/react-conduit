@@ -89,7 +89,7 @@ class MainView extends Component {
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
 MainView.propTypes = {

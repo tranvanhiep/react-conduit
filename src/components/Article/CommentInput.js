@@ -77,7 +77,7 @@ class CommentInput extends Component {
 
 const mapStateToProps = state => ({
   commentErrors: state.article.commentErrors,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
   article: state.article.article,
 });
 

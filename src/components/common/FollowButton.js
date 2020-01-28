@@ -52,7 +52,7 @@ class FollowButton extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
 FollowButton.propType = {

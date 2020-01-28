@@ -73,7 +73,7 @@ class ArticleActions extends Component {
 
 const mapStateToProps = state => ({
   ...state.article,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
 ArticleActions.propTypes = {

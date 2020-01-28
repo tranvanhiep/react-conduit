@@ -46,8 +46,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.common.currentUser,
-  appName: state.common.appName,
+  currentUser: state.app.currentUser,
+  appName: state.app.appName,
   tags: state.articleList.tags,
   loading: state.articleList.loading,
 });

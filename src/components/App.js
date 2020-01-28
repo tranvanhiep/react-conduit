@@ -80,7 +80,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { appName, redirectTo, appLoaded, currentUser } = state.common;
+  const { appName, redirectTo, appLoaded, currentUser } = state.app;
   return {
     appName,
     redirectTo,

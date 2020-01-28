@@ -137,7 +137,7 @@ class Settings extends Component {
 
 const mapStateToProps = state => ({
   ...state.settings,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
 Settings.propTypes = {

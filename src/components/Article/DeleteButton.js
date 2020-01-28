@@ -32,7 +32,7 @@ class DeleteButton extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
   commentDeleting: state.article.commentDeleting,
 });
 
