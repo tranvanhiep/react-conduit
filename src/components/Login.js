@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ErrorsList from './common/ErrorsList';
 import { connect } from 'react-redux';
 import { login, unloadLoginPage } from '../actions/auth';
+import PropTypes from 'prop-types';
 
 class Login extends Component {
   constructor(props) {
@@ -83,7 +84,11 @@ class Login extends Component {
 
 const mapStateToProps = state => ({ ...state.auth });
 
-export default connect(
-  mapStateToProps,
-  { login, unloadLoginPage }
-)(Login);
+Login.propTypes = {
+  inProgress: PropTypes.bool,
+  errors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
+
+export default connect(mapStateToProps, { login, unloadLoginPage })(Login);

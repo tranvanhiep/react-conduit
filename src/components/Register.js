@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ErrorsList from './common/ErrorsList';
 import { connect } from 'react-redux';
 import { register, unloadRegisterPage } from '../actions/auth';
+import PropTypes from 'prop-types';
 
 class Register extends Component {
   constructor(props) {
@@ -94,7 +95,13 @@ class Register extends Component {
 
 const mapStateToProps = state => ({ ...state.auth });
 
-export default connect(
-  mapStateToProps,
-  { register, unloadRegisterPage }
-)(Register);
+Register.propTypes = {
+  inProgress: PropTypes.bool,
+  errors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
+
+export default connect(mapStateToProps, { register, unloadRegisterPage })(
+  Register
+);

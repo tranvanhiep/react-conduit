@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { deleteArticle } from '../../actions/article';
 import FavoriteButton from '../common/FavoriteButton';
 import FollowButton from '../common/FollowButton';
+import PropTypes from 'prop-types';
 
 class ArticleActions extends Component {
   delete = slug => event => {
@@ -31,7 +32,10 @@ class ArticleActions extends Component {
     if (currentUser && currentUser.username === username) {
       return (
         <Fragment>
-          <Link to={`/editor/${slug}`} className="btn btn-outline-secondary btn-sm">
+          <Link
+            to={`/editor/${slug}`}
+            className="btn btn-outline-secondary btn-sm"
+          >
             <i className="ion-edit"></i> Edit Article
           </Link>
           &nbsp;
@@ -69,10 +73,21 @@ class ArticleActions extends Component {
 
 const mapStateToProps = state => ({
   ...state.article,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { deleteArticle }
-)(ArticleActions);
+ArticleActions.propTypes = {
+  article: PropTypes.object,
+  currentUser: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
+  followRequesting: PropTypes.bool,
+  favoriteRequesting: PropTypes.bool,
+  articleDeleting: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, { deleteArticle })(ArticleActions);

@@ -6,6 +6,7 @@ import CommentList from './CommentList';
 import marked from 'marked';
 import CommentInput from './CommentInput';
 import ArticleActions from './ArticleActions';
+import PropTypes from 'prop-types';
 
 class Article extends Component {
   componentDidMount() {
@@ -30,7 +31,15 @@ class Article extends Component {
       return null;
     }
 
-    const { slug, title, description, body, tagList, createdAt, author } = article;
+    const {
+      slug,
+      title,
+      description,
+      body,
+      tagList,
+      createdAt,
+      author,
+    } = article;
     const markup = { __html: marked(body, { sanitize: true }) };
 
     return (
@@ -52,7 +61,10 @@ class Article extends Component {
             <ul className="tag-list">
               {tagList.length &&
                 tagList.map((tag, idx) => (
-                  <li className="tag-default tag-pill tag-outline" key={`${tag}-${idx}`}>
+                  <li
+                    className="tag-default tag-pill tag-outline"
+                    key={`${tag}-${idx}`}
+                  >
                     {tag}
                   </li>
                 ))}
@@ -82,7 +94,19 @@ const mapStateToProps = state => ({
   ...state.article,
 });
 
-export default connect(
-  mapStateToProps,
-  { loadArticle, unloadArticle }
-)(Article);
+Article.propTypes = {
+  loading: PropTypes.bool,
+  article: PropTypes.shape({
+    slug: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    body: PropTypes.string,
+    tagList: PropTypes.arrayOf(PropTypes.string),
+    createdAt: PropTypes.string,
+    author: PropTypes.object,
+  }),
+};
+
+export default connect(mapStateToProps, { loadArticle, unloadArticle })(
+  Article
+);

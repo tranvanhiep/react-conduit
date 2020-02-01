@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { changeTab, resetArticleList } from '../../actions/articleList';
 import ArticleList from '../common/ArticleList';
 import cx from 'classnames';
-import { redirectToUrl } from '../../actions/common';
+import { redirectToUrl } from '../../actions/app';
 import { FEED_ARTICLES, ALL_ARTICLES } from '../../constants/constants';
+import PropTypes from 'prop-types';
 
 const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   let changeTab;
@@ -88,10 +89,17 @@ class MainView extends Component {
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { changeTab, redirectToUrl, resetArticleList }
-)(MainView);
+MainView.propTypes = {
+  currentUser: PropTypes.object,
+  tab: PropTypes.string,
+  tag: PropTypes.string,
+};
+
+export default connect(mapStateToProps, {
+  changeTab,
+  redirectToUrl,
+  resetArticleList,
+})(MainView);

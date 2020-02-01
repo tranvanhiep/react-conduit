@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Banner extends Component {
   render() {
@@ -18,5 +19,10 @@ class Banner extends Component {
     );
   }
 }
+
+Banner.propTypes = {
+  appName: PropTypes.string.isRequired,
+  currentUser: PropTypes.object,
+};
 
 export default Banner;

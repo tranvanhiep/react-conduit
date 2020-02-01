@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleMeta from './ArticleMeta';
 import FavoriteButton from './FavoriteButton';
+import PropTypes from 'prop-types';
 
 class ArticlePreview extends Component {
   render() {
@@ -49,5 +50,20 @@ class ArticlePreview extends Component {
     );
   }
 }
+
+ArticlePreview.propTypes = {
+  article: PropTypes.shape({
+    slug: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    body: PropTypes.string,
+    tagList: PropTypes.arrayOf(PropTypes.string),
+    createdAt: PropTypes.string,
+    favorited: PropTypes.bool,
+    favoritesCount: PropTypes.number,
+    author: PropTypes.object,
+    favoriteRequesting: PropTypes.bool,
+  }),
+};
 
 export default ArticlePreview;

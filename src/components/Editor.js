@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import { createArticle, updateArticle } from '../actions/article';
 import ErrorsList from './common/ErrorsList';
 import { unloadEditor, loadEditor } from '../actions/editor';
+import PropTypes from 'prop-types';
 
 class Editor extends Component {
   constructor(props) {
@@ -146,7 +147,10 @@ class Editor extends Component {
                     <div className="tag-list">
                       {tagList.map(tag => (
                         <span className="tag-default tag-pill" key={tag}>
-                          <i className="ion-close-round" onClick={this.removeTag(tag)}></i>
+                          <i
+                            className="ion-close-round"
+                            onClick={this.removeTag(tag)}
+                          ></i>
                           {tag}
                         </span>
                       ))}
@@ -173,6 +177,19 @@ class Editor extends Component {
 const mapStateToProps = state => ({
   ...state.editor,
 });
+
+Editor.propTypes = {
+  article: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    body: PropTypes.string,
+    tagList: PropTypes.array,
+  }),
+  inProgress: PropTypes.bool,
+  errors: PropTypes.shape({
+    body: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
 
 export default connect(mapStateToProps, {
   createArticle,

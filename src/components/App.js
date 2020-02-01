@@ -6,15 +6,16 @@ import Footer from './Footer';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
-import { resetRedirect } from '../actions/common';
+import { resetRedirect } from '../actions/app';
 import { push } from 'react-router-redux';
 import agent from '../agent';
-import { loadApp } from '../actions/common';
+import { loadApp } from '../actions/app';
 import Article from './Article';
 import Editor from './Editor';
 import Settings from './Settings';
 import Profile from './Profile';
 import { TOKEN_KEY } from '../constants/constants';
+import PropTypes from 'prop-types';
 
 class App extends Component {
   constructor(props) {
@@ -32,9 +33,10 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { redirectTo: prevRedirectTo } = prevProps;
     const { redirectTo, dispatch, resetRedirect } = this.props;
 
-    if (redirectTo) {
+    if (redirectTo && prevRedirectTo !== redirectTo) {
       dispatch(push(redirectTo));
       resetRedirect();
     }
@@ -59,9 +61,15 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/article/:slug" component={Article} />
-          <Route path="/editor/:slug">{currentUser ? <Editor /> : <Redirect to="/" />}</Route>
-          <Route path="/editor">{currentUser ? <Editor /> : <Redirect to="/" />}</Route>
-          <Route path="/settings">{currentUser ? <Settings /> : <Redirect to="/" />}</Route>
+          <Route path="/editor/:slug">
+            {currentUser ? <Editor /> : <Redirect to="/" />}
+          </Route>
+          <Route path="/editor">
+            {currentUser ? <Editor /> : <Redirect to="/" />}
+          </Route>
+          <Route path="/settings">
+            {currentUser ? <Settings /> : <Redirect to="/" />}
+          </Route>
           <Route path="/profile/:username/favorites" component={Profile} />
           <Route path="/profile/:username" component={Profile} />
         </Switch>
@@ -72,7 +80,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { appName, redirectTo, appLoaded, currentUser } = state.common;
+  const { appName, redirectTo, appLoaded, currentUser } = state.app;
   return {
     appName,
     redirectTo,
@@ -86,5 +94,12 @@ const mapDispatchToProps = dispatch => ({
   resetRedirect: () => dispatch(resetRedirect()),
   dispatch,
 });
+
+App.propTypes = {
+  appName: PropTypes.string.isRequired,
+  redirectTo: PropTypes.string,
+  appLoaded: PropTypes.bool,
+  currentUser: PropTypes.object,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

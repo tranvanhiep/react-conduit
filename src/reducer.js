@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import auth from './reducers/auth';
-import common from './reducers/common';
+import app from './reducers/app';
 import articleList from './reducers/articleList';
 import article from './reducers/article';
 import editor from './reducers/editor';
@@ -10,7 +10,7 @@ import profile from './reducers/profile';
 
 export default combineReducers({
   auth,
-  common,
+  app,
   articleList,
   article,
   editor,

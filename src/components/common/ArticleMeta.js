@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class ArticleMeta extends Component {
   render() {
@@ -26,5 +27,14 @@ class ArticleMeta extends Component {
     );
   }
 }
+
+ArticleMeta.propTypes = {
+  createdAt: PropTypes.string,
+  author: PropTypes.shape({
+    image: PropTypes.string,
+    username: PropTypes.string,
+  }),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
+};
 
 export default ArticleMeta;

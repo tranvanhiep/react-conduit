@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { follow, unfollow } from '../../actions/profile';
-import { redirectToUrl } from '../../actions/common';
+import { redirectToUrl } from '../../actions/app';
 import { followProfile, unfollowProfile } from '../../actions/article';
+import PropTypes from 'prop-types';
 
 class FollowButton extends Component {
   toggleFollow = (following, username) => event => {
@@ -51,10 +52,20 @@ class FollowButton extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.common.currentUser,
+  currentUser: state.app.currentUser,
 });
 
-export default connect(
-  mapStateToProps,
-  { follow, unfollow, redirectToUrl, followProfile, unfollowProfile }
-)(FollowButton);
+FollowButton.propType = {
+  currentUser: PropTypes.object,
+  username: PropTypes.string,
+  following: PropTypes.bool,
+  followRequesting: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, {
+  follow,
+  unfollow,
+  redirectToUrl,
+  followProfile,
+  unfollowProfile,
+})(FollowButton);

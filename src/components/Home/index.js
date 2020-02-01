@@ -6,6 +6,7 @@ import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';
 import { FEED_ARTICLES, ALL_ARTICLES } from '../../constants/constants';
+import PropTypes from 'prop-types';
 
 class Home extends Component {
   componentDidMount() {
@@ -30,7 +31,11 @@ class Home extends Component {
             <div className="col-md-3">
               <div className="sidebar">
                 <p>Popular Tags</p>
-                <Tags tags={tags} onSelectTag={setTagFilter} loading={loading} />
+                <Tags
+                  tags={tags}
+                  onSelectTag={setTagFilter}
+                  loading={loading}
+                />
               </div>
             </div>
           </div>
@@ -41,13 +46,22 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.common.currentUser,
-  appName: state.common.appName,
+  currentUser: state.app.currentUser,
+  appName: state.app.appName,
   tags: state.articleList.tags,
   loading: state.articleList.loading,
 });
 
-export default connect(
-  mapStateToProps,
-  { loadHomePage, unloadHomePage, setTagFilter }
-)(Home);
+Home.propTypes = {
+  currentUser: PropTypes.object,
+  appName: PropTypes.string.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.string),
+  loading: PropTypes.bool,
+  setTagFilter: PropTypes.func,
+};
+
+export default connect(mapStateToProps, {
+  loadHomePage,
+  unloadHomePage,
+  setTagFilter,
+})(Home);
