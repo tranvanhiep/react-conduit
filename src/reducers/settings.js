@@ -1,10 +1,10 @@
 import {
-  SETTINGS_PAGE_LOADED,
-  SETTINGS_PAGE_UNLOADED,
-  UPDATE_USER_REQUEST,
+  LOAD_SETTINGS_PAGE,
+  RESET_SETTINGS_PAGE,
+  UPDATE_USER,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILURE,
-} from '../constants/actionTypes';
+} from '../actions';
 
 const initialState = {
   loaded: false,
@@ -17,14 +17,14 @@ export default (state = initialState, action) => {
   const { type, errors } = action;
 
   switch (type) {
-    case SETTINGS_PAGE_LOADED:
+    case LOAD_SETTINGS_PAGE:
       return {
         ...state,
         loaded: true,
       };
-    case SETTINGS_PAGE_UNLOADED:
+    case RESET_SETTINGS_PAGE:
       return initialState;
-    case UPDATE_USER_REQUEST:
+    case UPDATE_USER:
       return {
         ...state,
         inProgress: true,

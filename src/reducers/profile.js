@@ -1,19 +1,19 @@
 import {
-  PROFILE_PAGE_UNLOADED,
+  RESET_PROFILE_PAGE,
   FOLLOW_SUCCESS,
   UNFOLLOW_SUCCESS,
-  FOLLOW_REQUEST,
+  FOLLOW,
   FOLLOW_FAILURE,
   UNFOLLOW_FAILURE,
-  UNFOLLOW_REQUEST,
-  PROFILE_PAGE_LOAD_SUCCEEDED,
-  PROFILE_PAGE_LOADING,
-  PROFILE_PAGE_LOAD_FAILED,
-} from '../constants/actionTypes';
+  UNFOLLOW,
+  LOAD_PROFILE_PAGE_SUCCESS,
+  LOAD_PROFILE_PAGE,
+  LOAD_PROFILE_PAGE_FAILURE,
+} from '../actions';
 
 const initialState = {
   profile: null,
-  profileLoading: true,
+  loading: true,
   followRequesting: false,
   errors: null,
 };
@@ -22,30 +22,30 @@ export default (state = initialState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
-    case PROFILE_PAGE_LOADING:
+    case LOAD_PROFILE_PAGE:
       return {
         ...state,
-        profileLoading: true,
+        loading: true,
       };
-    case PROFILE_PAGE_LOAD_FAILED:
+    case LOAD_PROFILE_PAGE_FAILURE:
       return {
         ...state,
-        profileLoading: false,
+        loading: false,
         errors,
       };
-    case PROFILE_PAGE_LOAD_SUCCEEDED: {
+    case LOAD_PROFILE_PAGE_SUCCESS: {
       const { profile } = payload;
       return {
         ...state,
         profile,
-        profileLoading: false,
+        loading: false,
         errors: null,
       };
     }
-    case PROFILE_PAGE_UNLOADED:
+    case RESET_PROFILE_PAGE:
       return initialState;
-    case FOLLOW_REQUEST:
-    case UNFOLLOW_REQUEST:
+    case FOLLOW:
+    case UNFOLLOW:
       return {
         ...state,
         followRequesting: true,

@@ -1,27 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { changeTab, resetArticleList } from '../../actions/articleList';
 import ArticleList from '../common/ArticleList';
+import Tags from './Tags';
 import cx from 'classnames';
-import { redirectToUrl } from '../../actions/app';
-import { FEED_ARTICLES, ALL_ARTICLES } from '../../constants/constants';
+import { redirectToUrl } from '../../actions';
 import PropTypes from 'prop-types';
+import { ALL, FEED } from '../../constants';
 
-const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
-  let changeTab;
-
-  if (currentUser) {
-    changeTab = onChangeTab(FEED_ARTICLES);
-  } else {
-    changeTab = () => redirectToUrl('/login');
-  }
-
+const YourFeedTab = ({ type, setConfig }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: tab === FEED_ARTICLES })}
-        onClick={changeTab}
-        disabled={tab === FEED_ARTICLES}
+        className={cx('nav-link', { active: type === FEED })}
+        onClick={setConfig}
+        disabled={type === FEED}
       >
         Your Feed
       </button>
@@ -29,13 +21,13 @@ const YourFeedTab = ({ currentUser, tab, onChangeTab, redirectToUrl }) => {
   );
 };
 
-const GlobalFeedTab = ({ tab, onChangeTab }) => {
+const GlobalFeedTab = ({ type, tag, setConfig }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: tab === ALL_ARTICLES })}
-        onClick={onChangeTab(ALL_ARTICLES)}
-        disabled={tab === ALL_ARTICLES}
+        className={cx('nav-link', { active: type === ALL && !tag })}
+        onClick={setConfig}
+        disabled={type === ALL && !tag}
       >
         Global Feed
       </button>
@@ -58,48 +50,109 @@ const TagFilterTab = ({ tag }) => {
 };
 
 class MainView extends Component {
-  handleChangeTab = tab => event => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      config: {
+        type: '',
+        filters: {
+          tag: '',
+        },
+      },
+      limit: 10,
+    };
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    if (currentUser) {
+      this.setState(state => ({
+        ...state,
+        config: { ...state.config, type: FEED },
+      }));
+    }
+  }
+
+  loadGlobalArticles = event => {
     event.preventDefault();
-    this.props.resetArticleList();
-    this.props.changeTab(tab, 10);
+    this.setState(state => ({
+      ...state,
+      config: { type: ALL, filters: {} },
+    }));
+  };
+
+  loadFeedArticles = event => {
+    event.preventDefault();
+    const { currentUser } = this.props;
+
+    if (currentUser) {
+      this.setState(state => ({
+        ...state,
+        config: { type: FEED, filters: {} },
+      }));
+    } else {
+      this.props.redirectToUrl('/login');
+    }
+  };
+
+  loadTagArticles = tag => event => {
+    event.preventDefault();
+    this.setState(state => ({
+      ...state,
+      config: { type: ALL, filters: { tag } },
+    }));
   };
 
   render() {
-    const { tag, currentUser, tab } = this.props;
+    const { tags, loading } = this.props;
+    const { config, limit } = this.state;
+    const {
+      type,
+      filters: { tag },
+    } = config;
 
     return (
-      <div className="col-md-9">
-        <div className="feed-toggle">
-          <ul className="nav nav-pills outline-active">
-            <YourFeedTab
-              currentUser={currentUser}
-              tab={tab}
-              onChangeTab={this.handleChangeTab}
-              redirectToUrl={this.props.redirectToUrl}
-            />
-            <GlobalFeedTab tab={tab} onChangeTab={this.handleChangeTab} />
-            <TagFilterTab tag={tag} />
-          </ul>
+      <Fragment>
+        <div className="col-md-9">
+          <div className="feed-toggle">
+            <ul className="nav nav-pills outline-active">
+              <YourFeedTab type={type} setConfig={this.loadFeedArticles} />
+              <GlobalFeedTab
+                type={type}
+                tag={tag}
+                setConfig={this.loadGlobalArticles}
+              />
+              <TagFilterTab tag={tag} setConfig={this.loadTagArticles} />
+            </ul>
+          </div>
+          <ArticleList config={config} limit={limit} />
         </div>
-        <ArticleList />
-      </div>
+        <div className="col-md-3">
+          <div className="sidebar">
+            <p>Popular Tags</p>
+            <Tags
+              tags={tags}
+              setConfig={this.loadTagArticles}
+              loading={loading}
+            />
+          </div>
+        </div>
+      </Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
   ...state.articleList,
+  ...state.home,
   currentUser: state.app.currentUser,
 });
 
 MainView.propTypes = {
   currentUser: PropTypes.object,
-  tab: PropTypes.string,
-  tag: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default connect(mapStateToProps, {
-  changeTab,
   redirectToUrl,
-  resetArticleList,
 })(MainView);

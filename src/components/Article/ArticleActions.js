@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { deleteArticle } from '../../actions/article';
+import { deleteArticle } from '../../actions';
 import FavoriteButton from '../common/FavoriteButton';
 import FollowButton from '../common/FollowButton';
 import PropTypes from 'prop-types';

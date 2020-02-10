@@ -6,15 +6,15 @@ import Footer from './Footer';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
-import { resetRedirect } from '../actions/app';
-import { push } from 'react-router-redux';
-import agent from '../agent';
-import { loadApp } from '../actions/app';
 import Article from './Article';
 import Editor from './Editor';
 import Settings from './Settings';
 import Profile from './Profile';
-import { TOKEN_KEY } from '../constants/constants';
+import { resetRedirect } from '../actions';
+import { push } from 'react-router-redux';
+import http from '../http';
+import { loadApp } from '../actions';
+import { TOKEN_KEY } from '../constants';
 import PropTypes from 'prop-types';
 
 class App extends Component {
@@ -27,7 +27,7 @@ class App extends Component {
     const token = window.localStorage.getItem(TOKEN_KEY);
 
     if (token) {
-      agent.setToken(token);
+      http.setToken(token);
     }
     this.props.loadApp();
   }

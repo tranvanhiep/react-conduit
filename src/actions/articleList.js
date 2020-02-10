@@ -1,90 +1,43 @@
-import agent from '../agent';
-import {
-  SET_PAGE,
-  FAVORITE_ARTICLE_REQUEST,
-  FAVORITE_ARTICLE_SUCCESS,
-  FAVORITE_ARTICLE_FAILURE,
-  UNFAVORITE_ARTICLE_REQUEST,
-  UNFAVORITE_ARTICLE_SUCCESS,
-  UNFAVORITE_ARTICLE_FAILURE,
-  TAB_CHANGING,
-  TAB_CHANGE_SUCCEEDED,
-  TAB_CHANGE_FAILED,
-  SET_PAGE_SUCCEEDED,
-  SET_PAGE_FAILED,
-  TAG_FILTERING,
-  TAG_FILTER_SUCCEEDED,
-  TAG_FILTER_FAILED,
-  AUTHOR_ARTICLE_LOADING,
-  AUTHOR_ARTICLE_LOAD_SUCCEEDED,
-  AUTHOR_ARTICLE_LOAD_FAILED,
-  RESET_ARTICLE_LIST,
-} from '../constants/actionTypes';
+import http from '../http';
 import { fulfilHandler, rejectHandler } from '../utils';
-import { FEED_ARTICLES, FAVORITE_ARTICLES } from '../constants/constants';
 
-export const changeTab = (tab, limit) => dispatch => {
-  const pager = tab === FEED_ARTICLES ? agent.Articles.feed(limit) : agent.Articles.all(limit);
-  dispatch({ type: TAB_CHANGING });
+export const FAVORITE_ARTICLE = 'FAVORITE_ARTICLE';
+export const FAVORITE_ARTICLE_SUCCESS = 'FAVORITE_ARTICLE_SUCCESS';
+export const FAVORITE_ARTICLE_FAILURE = 'FAVORITE_ARTICLE_FAILURE';
 
-  const articleList =
-    tab === FEED_ARTICLES ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0);
-  return articleList.then(
-    fulfilHandler(TAB_CHANGE_SUCCEEDED, dispatch, { pager, tab, limit }),
-    rejectHandler(TAB_CHANGE_FAILED, dispatch)
+export const UNFAVORITE_ARTICLE = 'UNFAVORITE_ARTICLE';
+export const UNFAVORITE_ARTICLE_SUCCESS = 'UNFAVORITE_ARTICLE_SUCCESS';
+export const UNFAVORITE_ARTICLE_FAILURE = 'UNFAVORITE_ARTICLE_FAILURE';
+
+export const LOAD_ARTICLE_LIST = 'LOAD_ARTICLE_LIST';
+export const LOAD_ARTICLE_LIST_SUCCESS = 'LOAD_ARTICLE_LIST_SUCCESS';
+export const LOAD_ARTICLE_LIST_FAILURE = 'LOAD_ARTICLE_LIST_FAILURE';
+export const RESET_ARTICLE_LIST = 'RESET_ARTICLE_LIST';
+
+export const loadArticles = config => dispatch => {
+  dispatch({ type: LOAD_ARTICLE_LIST });
+  return http.Articles.getArticles(config).then(
+    fulfilHandler(LOAD_ARTICLE_LIST_SUCCESS, dispatch),
+    rejectHandler(LOAD_ARTICLE_LIST_FAILURE, dispatch)
   );
 };
 
-export const setPage = page => (dispatch, getState) => {
-  const {
-    articleList: { pager },
-  } = getState();
-  dispatch({ type: SET_PAGE });
-
-  return pager(page).then(
-    fulfilHandler(SET_PAGE_SUCCEEDED, dispatch, { currentPage: page + 1 }),
-    rejectHandler(SET_PAGE_FAILED, dispatch)
-  );
-};
-
-export const setTagFilter = (tag, pager, limit) => dispatch => {
-  dispatch({ type: TAG_FILTERING });
-
-  return pager(tag, limit)(0).then(
-    fulfilHandler(TAG_FILTER_SUCCEEDED, dispatch, { pager: pager(tag, limit), tag, limit }),
-    rejectHandler(TAG_FILTER_FAILED, dispatch)
-  );
-};
-
-export const loadAuthorArticle = (tab, username, limit) => dispatch => {
-  dispatch({ type: AUTHOR_ARTICLE_LOADING });
-  const pager =
-    tab === FAVORITE_ARTICLES
-      ? agent.Articles.favoritedBy(username, limit)
-      : agent.Articles.byAuthor(username, limit);
-
-  return pager(0).then(
-    fulfilHandler(AUTHOR_ARTICLE_LOAD_SUCCEEDED, dispatch, { pager, limit }),
-    rejectHandler(AUTHOR_ARTICLE_LOAD_FAILED, dispatch)
-  );
-};
+export const unloadArticles = () => ({ type: RESET_ARTICLE_LIST });
 
 export const favoriteArticle = slug => dispatch => {
-  dispatch({ type: FAVORITE_ARTICLE_REQUEST, slug });
+  dispatch({ type: FAVORITE_ARTICLE, slug });
 
-  return agent.Articles.favorite(slug).then(
+  return http.Articles.favorite(slug).then(
     fulfilHandler(FAVORITE_ARTICLE_SUCCESS, dispatch),
     rejectHandler(FAVORITE_ARTICLE_FAILURE, dispatch, { slug })
   );
 };
 
 export const unfavoriteArticle = slug => dispatch => {
-  dispatch({ type: UNFAVORITE_ARTICLE_REQUEST });
+  dispatch({ type: UNFAVORITE_ARTICLE });
 
-  return agent.Articles.unfavorite(slug).then(
+  return http.Articles.unfavorite(slug).then(
     fulfilHandler(UNFAVORITE_ARTICLE_SUCCESS, dispatch),
     rejectHandler(UNFAVORITE_ARTICLE_FAILURE, dispatch)
   );
 };
-
-export const resetArticleList = () => ({ type: RESET_ARTICLE_LIST });

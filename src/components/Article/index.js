@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ArticleMeta from '../common/ArticleMeta';
-import { loadArticle, unloadArticle } from '../../actions/article';
+import { loadArticle, unloadArticle } from '../../actions';
 import CommentList from './CommentList';
 import marked from 'marked';
 import CommentInput from './CommentInput';

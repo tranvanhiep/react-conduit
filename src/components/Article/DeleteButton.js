@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteComment } from '../../actions/article';
+import { deleteComment } from '../../actions';
 import * as cx from 'classnames';
 import styles from './deleteButton.module.scss';
 import PropTypes from 'prop-types';

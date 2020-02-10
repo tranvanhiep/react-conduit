@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ErrorsList from '../common/ErrorsList';
-import { addComment } from '../../actions/article';
+import { addComment } from '../../actions';
 import PropTypes from 'prop-types';
 
 class CommentInput extends Component {

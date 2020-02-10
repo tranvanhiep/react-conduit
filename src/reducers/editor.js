@@ -1,15 +1,15 @@
 import {
-  EDITOR_PAGE_UNLOADED,
+  RESET_EDITOR_PAGE,
   UPDATE_ARTICLE_FAILURE,
   CREATE_ARTICLE_FAILURE,
   UPDATE_ARTICLE_SUCCESS,
   CREATE_ARTICLE_SUCCESS,
-  CREATE_ARTICLE_REQUEST,
-  UPDATE_ARTICLE_REQUEST,
-  EDITOR_PAGE_LOAD_SUCCEEDED,
-  EDITOR_PAGE_LOADING,
-  EDITOR_PAGE_LOAD_FAILED,
-} from '../constants/actionTypes';
+  CREATE_ARTICLE,
+  UPDATE_ARTICLE,
+  LOAD_EDITOR_PAGE_SUCCESS,
+  LOAD_EDITOR_PAGE,
+  LOAD_EDITOR_PAGE_FAILURE,
+} from '../actions';
 
 const initialState = {
   article: {
@@ -27,8 +27,8 @@ export default (state = initialState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
-    case UPDATE_ARTICLE_REQUEST:
-    case CREATE_ARTICLE_REQUEST:
+    case UPDATE_ARTICLE:
+    case CREATE_ARTICLE:
       return {
         ...state,
         inProgress: true,
@@ -50,18 +50,18 @@ export default (state = initialState, action) => {
         article,
       };
     }
-    case EDITOR_PAGE_LOADING:
+    case LOAD_EDITOR_PAGE:
       return {
         ...state,
         inProgress: true,
       };
-    case EDITOR_PAGE_LOAD_FAILED:
+    case LOAD_EDITOR_PAGE_FAILURE:
       return {
         ...state,
         inProgress: false,
         errors,
       };
-    case EDITOR_PAGE_LOAD_SUCCEEDED: {
+    case LOAD_EDITOR_PAGE_SUCCESS: {
       const { article } = payload;
       return {
         ...state,
@@ -71,7 +71,7 @@ export default (state = initialState, action) => {
         errors: null,
       };
     }
-    case EDITOR_PAGE_UNLOADED:
+    case RESET_EDITOR_PAGE:
       return initialState;
     default:
       return state;

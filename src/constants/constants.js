@@ -1,5 +1,0 @@
-export const TOKEN_KEY = 'jwt';
-export const FEED_ARTICLES = 'FEED_ARTICLES';
-export const ALL_ARTICLES = 'ALL_ARTICLES';
-export const AUTHOR_ARTICLES = 'AUTHOR_ARTICLES';
-export const FAVORITE_ARTICLES = 'FAVORITE_ARTICLES';
