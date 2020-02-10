@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { favorite, unfavorite } from '../../actions/article';
-import { redirectToUrl } from '../../actions/app';
-import { favoriteArticle, unfavoriteArticle } from '../../actions/articleList';
+import { favorite, unfavorite } from '../../actions';
+import { redirectToUrl } from '../../actions';
+import { favoriteArticle, unfavoriteArticle } from '../../actions';
 import PropTypes from 'prop-types';
 
 class FavoriteButton extends Component {

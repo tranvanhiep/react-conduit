@@ -1,13 +1,13 @@
 import {
-  LOGIN_PAGE_UNLOADED,
-  REGISTER_PAGE_UNLOAD,
-  LOGIN_REQUEST,
+  RESET_LOGIN_PAGE,
+  RESET_REGISTER_PAGE,
+  LOGIN,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  REGISTER_REQUEST,
+  REGISTER,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
-} from '../constants/actionTypes';
+} from '../actions';
 
 const initialState = {
   inProgress: false,
@@ -18,8 +18,8 @@ export default (state = initialState, action) => {
   const { type, errors } = action;
 
   switch (type) {
-    case LOGIN_REQUEST:
-    case REGISTER_REQUEST:
+    case LOGIN:
+    case REGISTER:
       return {
         ...state,
         inProgress: true,
@@ -37,8 +37,8 @@ export default (state = initialState, action) => {
         inProgress: false,
         errors,
       };
-    case LOGIN_PAGE_UNLOADED:
-    case REGISTER_PAGE_UNLOAD:
+    case RESET_LOGIN_PAGE:
+    case RESET_REGISTER_PAGE:
       return initialState;
     default:
       return state;

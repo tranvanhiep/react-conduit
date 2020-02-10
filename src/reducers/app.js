@@ -11,7 +11,7 @@ import {
   CREATE_ARTICLE_SUCCESS,
   UPDATE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_SUCCESS,
-} from '../constants/actionTypes';
+} from '../actions';
 
 const initialState = {
   appName: 'Conduit',

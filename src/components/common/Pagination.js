@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setPage } from '../../actions/articleList';
+import { setPage } from '../../actions';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ErrorsList from './common/ErrorsList';
-import { loadSettings, unloadSettings, updateUser } from '../actions/settings';
-import { logout } from '../actions/auth';
+import { loadSettings, unloadSettings, updateUser } from '../actions';
+import { logout } from '../actions';
 import PropTypes from 'prop-types';
 
 class Settings extends Component {

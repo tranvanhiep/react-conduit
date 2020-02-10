@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { createArticle, updateArticle } from '../actions/article';
+import { createArticle, updateArticle } from '../actions';
 import ErrorsList from './common/ErrorsList';
-import { unloadEditor, loadEditor } from '../actions/editor';
+import { unloadEditor, loadEditor } from '../actions';
 import PropTypes from 'prop-types';
 
 class Editor extends Component {

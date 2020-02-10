@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorsList from './common/ErrorsList';
 import { connect } from 'react-redux';
-import { register, unloadRegisterPage } from '../actions/auth';
+import { register, unloadRegisterPage } from '../actions';
 import PropTypes from 'prop-types';
 
 class Register extends Component {

@@ -1,43 +1,44 @@
-import agent from '../agent';
-import {
-  PROFILE_PAGE_UNLOADED,
-  PROFILE_PAGE_LOADING,
-  FOLLOW_REQUEST,
-  FOLLOW_SUCCESS,
-  FOLLOW_FAILURE,
-  UNFOLLOW_REQUEST,
-  UNFOLLOW_SUCCESS,
-  UNFOLLOW_FAILURE,
-  PROFILE_PAGE_LOAD_SUCCEEDED,
-  PROFILE_PAGE_LOAD_FAILED,
-} from '../constants/actionTypes';
+import http from '../http';
 import { fulfilHandler, rejectHandler } from '../utils';
 
-export const follow = username => dispatch => {
-  dispatch({ type: FOLLOW_REQUEST });
+export const LOAD_PROFILE_PAGE = 'LOAD_PROFILE_PAGE';
+export const LOAD_PROFILE_PAGE_SUCCESS = 'LOAD_PROFILE_PAGE_SUCCESS';
+export const LOAD_PROFILE_PAGE_FAILURE = 'LOAD_PROFILE_PAGE_FAILURE';
+export const RESET_PROFILE_PAGE = 'RESET_PROFILE_PAGE';
 
-  return agent.Profiles.follow(username).then(
+export const FOLLOW = 'FOLLOW';
+export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
+export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
+
+export const UNFOLLOW = 'UNFOLLOW';
+export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
+export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
+
+export const follow = username => dispatch => {
+  dispatch({ type: FOLLOW });
+
+  return http.Profiles.follow(username).then(
     fulfilHandler(FOLLOW_SUCCESS, dispatch),
     rejectHandler(FOLLOW_FAILURE, dispatch)
   );
 };
 
 export const unfollow = username => dispatch => {
-  dispatch({ type: UNFOLLOW_REQUEST });
+  dispatch({ type: UNFOLLOW });
 
-  return agent.Profiles.unfollow(username).then(
+  return http.Profiles.unfollow(username).then(
     fulfilHandler(UNFOLLOW_SUCCESS, dispatch),
     rejectHandler(UNFOLLOW_FAILURE, dispatch)
   );
 };
 
 export const loadProfilePage = username => dispatch => {
-  dispatch({ type: PROFILE_PAGE_LOADING });
+  dispatch({ type: LOAD_PROFILE_PAGE });
 
-  return agent.Profiles.get(username).then(
-    fulfilHandler(PROFILE_PAGE_LOAD_SUCCEEDED, dispatch),
-    rejectHandler(PROFILE_PAGE_LOAD_FAILED, dispatch)
+  return http.Profiles.get(username).then(
+    fulfilHandler(LOAD_PROFILE_PAGE_SUCCESS, dispatch),
+    rejectHandler(LOAD_PROFILE_PAGE_FAILURE, dispatch)
   );
 };
 
-export const unloadProfile = () => ({ type: PROFILE_PAGE_UNLOADED });
+export const unloadProfile = () => ({ type: RESET_PROFILE_PAGE });

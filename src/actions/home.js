@@ -1,24 +1,16 @@
-import agent from '../agent';
-import {
-  HOME_PAGE_UNLOADED,
-  HOME_PAGE_LOADING,
-  HOME_PAGE_LOAD_SUCCEEDED,
-  HOME_PAGE_LOAD_FAILED,
-} from '../constants/actionTypes';
+import http from '../http';
 import { fulfilHandler, rejectHandler } from '../utils';
-import { FEED_ARTICLES } from '../constants/constants';
 
-export const loadHomePage = (tab, limit) => dispatch => {
-  const pager = tab === FEED_ARTICLES ? agent.Articles.feed(limit) : agent.Articles.all(limit);
-  dispatch({ type: HOME_PAGE_LOADING });
+export const LOAD_HOME_PAGE = 'LOAD_HOME_PAGE';
+export const LOAD_HOME_PAGE_SUCCESS = 'LOAD_HOME_PAGE_SUCCESS';
+export const LOAD_HOME_PAGE_FAILURE = 'LOAD_HOME_PAGE_FAILURE';
+export const RESET_HOME_PAGE = 'RESET_HOME_PAGE';
 
-  return Promise.all([
-    agent.Tags.getAll(),
-    tab === FEED_ARTICLES ? agent.Articles.feed(limit)(0) : agent.Articles.all(limit)(0),
-  ]).then(
-    fulfilHandler(HOME_PAGE_LOAD_SUCCEEDED, dispatch, { tab, pager, limit }),
-    rejectHandler(HOME_PAGE_LOAD_FAILED, dispatch)
+export const loadHomePage = () => dispatch => {
+  return http.Tags.getAll().then(
+    fulfilHandler(LOAD_HOME_PAGE_SUCCESS, dispatch),
+    rejectHandler(LOAD_HOME_PAGE_FAILURE, dispatch)
   );
 };
 
-export const unloadHomePage = () => ({ type: HOME_PAGE_UNLOADED });
+export const unloadHomePage = () => ({ type: RESET_HOME_PAGE });

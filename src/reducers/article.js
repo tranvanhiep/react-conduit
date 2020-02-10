@@ -1,5 +1,5 @@
 import {
-  ARTICLE_PAGE_UNLOADED,
+  RESET_ARTICLE_PAGE,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_SUCCESS,
   DELETE_COMMENT_FAILURE,
@@ -8,23 +8,23 @@ import {
   UNFAVORITE_SUCCESS,
   FOLLOW_PROFILE_SUCCESS,
   UNFOLLOW_PROFILE_SUCCESS,
-  FOLLOW_PROFILE_REQUEST,
-  FAVORITE_REQUEST,
-  UNFAVORITE_REQUEST,
+  FOLLOW_PROFILE,
+  FAVORITE,
+  UNFAVORITE,
   FAVORITE_FAILURE,
   UNFAVORITE_FAILURE,
   FOLLOW_PROFILE_FAILURE,
-  UNFOLLOW_PROFILE_REQUEST,
+  UNFOLLOW_PROFILE,
   UNFOLLOW_PROFILE_FAILURE,
-  DELETE_ARTICLE_REQUEST,
+  DELETE_ARTICLE,
   DELETE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_FAILURE,
-  DELETE_COMMENT_REQUEST,
-  ADD_COMMENT_REQUEST,
-  ARTICLE_PAGE_LOAD_SUCCEEDED,
-  ARTICLE_PAGE_LOADING,
-  ARTICLE_PAGE_LOAD_FAILED,
-} from '../constants/actionTypes';
+  DELETE_COMMENT,
+  ADD_COMMENT,
+  LOAD_ARTICLE_PAGE_SUCCESS,
+  LOAD_ARTICLE_PAGE,
+  LOAD_ARTICLE_PAGE_FAILURE,
+} from '../actions';
 
 const initialState = {
   loading: true,
@@ -42,18 +42,18 @@ export default (state = initialState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
-    case ARTICLE_PAGE_LOADING:
+    case LOAD_ARTICLE_PAGE:
       return {
         ...state,
         loading: true,
       };
-    case ARTICLE_PAGE_LOAD_FAILED:
+    case LOAD_ARTICLE_PAGE_FAILURE:
       return {
         ...state,
         loading: false,
         errors,
       };
-    case ARTICLE_PAGE_LOAD_SUCCEEDED: {
+    case LOAD_ARTICLE_PAGE_SUCCESS: {
       const { article } = payload[0];
       const { comments } = payload[1];
       return {
@@ -64,10 +64,10 @@ export default (state = initialState, action) => {
         errors: null,
       };
     }
-    case ARTICLE_PAGE_UNLOADED:
+    case RESET_ARTICLE_PAGE:
       return initialState;
-    case FAVORITE_REQUEST:
-    case UNFAVORITE_REQUEST:
+    case FAVORITE:
+    case UNFAVORITE:
       return {
         ...state,
         favoriteRequesting: true,
@@ -87,8 +87,8 @@ export default (state = initialState, action) => {
         article,
       };
     }
-    case FOLLOW_PROFILE_REQUEST:
-    case UNFOLLOW_PROFILE_REQUEST:
+    case FOLLOW_PROFILE:
+    case UNFOLLOW_PROFILE:
       return {
         ...state,
         followRequesting: true,
@@ -111,7 +111,7 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case DELETE_ARTICLE_REQUEST:
+    case DELETE_ARTICLE:
       return {
         ...state,
         articleDeleting: true,
@@ -128,7 +128,7 @@ export default (state = initialState, action) => {
         articleDeleting: false,
         errors,
       };
-    case DELETE_COMMENT_REQUEST:
+    case DELETE_COMMENT:
       return {
         ...state,
         commentDeleting: true,
@@ -148,7 +148,7 @@ export default (state = initialState, action) => {
         commentDeleting: false,
       };
     }
-    case ADD_COMMENT_REQUEST:
+    case ADD_COMMENT:
       return {
         ...state,
         commentSubmitting: true,

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { follow, unfollow } from '../../actions/profile';
-import { redirectToUrl } from '../../actions/app';
-import { followProfile, unfollowProfile } from '../../actions/article';
+import { follow, unfollow } from '../../actions';
+import { redirectToUrl } from '../../actions';
+import { followProfile, unfollowProfile } from '../../actions';
 import PropTypes from 'prop-types';
 
 class FollowButton extends Component {

@@ -1,30 +1,32 @@
-import agent from '../agent';
-import {
-  LOGIN_PAGE_UNLOADED,
-  REGISTER_PAGE_UNLOAD,
-  LOGOUT,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
-} from '../constants/actionTypes';
+import http from '../http';
 import { fulfilHandler, rejectHandler } from '../utils';
 
-export const login = (email, password) => dispatch => {
-  dispatch({ type: LOGIN_REQUEST });
+export const RESET_LOGIN_PAGE = 'RESET_LOGIN_PAGE';
+export const RESET_REGISTER_PAGE = 'RESET_REGISTER_PAGE';
 
-  return agent.Auth.login(email, password).then(
+export const LOGOUT = 'LOGOUT';
+
+export const LOGIN = 'LOGIN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+
+export const REGISTER = 'REGISTER';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAILURE = 'REGISTER_FAILURE';
+
+export const login = (email, password) => dispatch => {
+  dispatch({ type: LOGIN });
+
+  return http.Auth.login(email, password).then(
     fulfilHandler(LOGIN_SUCCESS, dispatch),
     rejectHandler(LOGIN_FAILURE, dispatch)
   );
 };
 
 export const register = (username, email, password) => dispatch => {
-  dispatch({ type: REGISTER_REQUEST });
+  dispatch({ type: REGISTER });
 
-  return agent.Auth.register(username, email, password).then(
+  return http.Auth.register(username, email, password).then(
     fulfilHandler(REGISTER_SUCCESS, dispatch),
     rejectHandler(REGISTER_FAILURE, dispatch)
   );
@@ -34,6 +36,6 @@ export const logout = () => ({
   type: LOGOUT,
 });
 
-export const unloadLoginPage = () => ({ type: LOGIN_PAGE_UNLOADED });
+export const unloadLoginPage = () => ({ type: RESET_LOGIN_PAGE });
 
-export const unloadRegisterPage = () => ({ type: REGISTER_PAGE_UNLOAD });
+export const unloadRegisterPage = () => ({ type: RESET_REGISTER_PAGE });
