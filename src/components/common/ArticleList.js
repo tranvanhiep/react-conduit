@@ -76,7 +76,7 @@ class ArticleList extends Component {
   };
 
   render() {
-    const { articles, loading, articlesCount, limit } = this.props;
+    const { articles, loading, articlesCount, limit, favoriting } = this.props;
     const pagination = Array.from(
       new Array(Math.ceil(articlesCount / limit)),
       (val, idx) => ++idx
@@ -95,7 +95,11 @@ class ArticleList extends Component {
       <Fragment>
         {articles &&
           articles.map(article => (
-            <ArticlePreview article={article} key={article.slug} />
+            <ArticlePreview
+              article={article}
+              favoriting={favoriting}
+              key={article.slug}
+            />
           ))}
         <nav>
           <ul className="pagination">
@@ -126,7 +130,7 @@ ArticleList.propTypes = {
   loading: PropTypes.bool,
   articles: PropTypes.arrayOf(PropTypes.object),
   config: PropTypes.shape({
-    type: PropTypes.string.isRequired,
+    type: PropTypes.string,
     filters: PropTypes.shape({
       tag: PropTypes.string,
       author: PropTypes.string,

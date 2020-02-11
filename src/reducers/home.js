@@ -4,6 +4,7 @@ import {
   LOAD_HOME_PAGE_FAILURE,
   RESET_HOME_PAGE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   loading: false,
@@ -11,21 +12,30 @@ const initialState = {
   errors: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
     case LOAD_HOME_PAGE:
-      return { ...state, loading: true, errors: null };
+      draftState.loading = true;
+      draftState.errors = null;
+      break;
     case LOAD_HOME_PAGE_SUCCESS: {
       const { tags } = payload;
-      return { ...state, loading: false, tags };
+      draftState.loading = false;
+      draftState.tags = tags;
+      break;
     }
     case LOAD_HOME_PAGE_FAILURE:
-      return { ...state, loading: false, errors };
+      draftState.loading = false;
+      draftState.errors = errors;
+      break;
     case RESET_HOME_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

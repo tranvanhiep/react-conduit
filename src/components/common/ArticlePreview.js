@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 class ArticlePreview extends Component {
   render() {
-    const { article } = this.props;
+    const { article, favoriting } = this.props;
     const {
       slug,
       title,
@@ -17,7 +17,6 @@ class ArticlePreview extends Component {
       favorited,
       favoritesCount,
       author,
-      favoriteRequesting,
     } = article;
 
     return (
@@ -27,7 +26,7 @@ class ArticlePreview extends Component {
             <FavoriteButton
               slug={slug}
               favorited={favorited}
-              favoriteRequesting={favoriteRequesting}
+              favoritting={favoriting}
             >
               <i className="ion-heart"></i> {favoritesCount}
             </FavoriteButton>
@@ -62,7 +61,7 @@ ArticlePreview.propTypes = {
     favorited: PropTypes.bool,
     favoritesCount: PropTypes.number,
     author: PropTypes.object,
-    favoriteRequesting: PropTypes.bool,
+    favoriting: PropTypes.bool,
   }),
 };
 

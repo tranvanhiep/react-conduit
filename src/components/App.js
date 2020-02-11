@@ -14,7 +14,7 @@ import { resetRedirect } from '../actions';
 import { push } from 'react-router-redux';
 import http from '../http';
 import { loadApp } from '../actions';
-import { TOKEN_KEY } from '../constants';
+import { TOKEN_KEY } from '../constants/constants';
 import PropTypes from 'prop-types';
 
 class App extends Component {

@@ -1,5 +1,4 @@
 import fetch from 'cross-fetch';
-import { ALL, FEED } from './constants';
 
 const API_ROOT = process.env.REACT_APP_API_ENDPOINT;
 
@@ -74,7 +73,7 @@ const Articles = {
       type,
       filters: { limit, offset, favorited, author, tag },
     } = config;
-    if (type === FEED) {
+    if (type === 'feed') {
       return Articles.feed(limit, offset);
     } else if (author) {
       return Articles.byAuthor(limit, offset, author);
@@ -82,7 +81,7 @@ const Articles = {
       return Articles.favoritedBy(limit, offset, favorited);
     } else if (tag) {
       return Articles.byTag(limit, offset, tag);
-    } else if (type === ALL) {
+    } else if (type === 'all') {
       return Articles.all(limit, offset);
     } else {
       return Promise.reject({

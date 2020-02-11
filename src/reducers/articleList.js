@@ -10,87 +10,64 @@ import {
   LOAD_ARTICLE_LIST_FAILURE,
   RESET_ARTICLE_LIST,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   loading: false,
   articles: null,
   articlesCount: 0,
   errors: null,
+  favoriting: false,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
     case LOAD_ARTICLE_LIST:
-      return {
-        ...state,
-        loading: true,
-        errors: null,
-      };
+      draftState.loading = true;
+      draftState.errors = null;
+      break;
     case LOAD_ARTICLE_LIST_SUCCESS: {
       const { articles, articlesCount } = payload;
-      return {
-        ...state,
-        articles,
-        articlesCount,
-        loading: false,
-      };
+      draftState.articles = articles;
+      draftState.articlesCount = articlesCount;
+      draftState.loading = false;
+      break;
     }
     case LOAD_ARTICLE_LIST_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        errors,
-      };
+      draftState.loading = false;
+      draftState.errors = errors;
+      break;
     case FAVORITE_ARTICLE:
     case UNFAVORITE_ARTICLE: {
-      const { slug } = action;
-      return {
-        ...state,
-        articles: filterAssign(slug, state.articles, {
-          favoriteRequesting: true,
-        }),
-      };
+      draftState.favoriting = true;
+      break;
     }
     case FAVORITE_ARTICLE_FAILURE:
     case UNFAVORITE_ARTICLE_FAILURE: {
-      const { slug } = action;
-      return {
-        ...state,
-        articles: filterAssign(slug, state.articles, {
-          favoriteRequesting: false,
-        }),
-      };
+      draftState.favoriting = false;
+      break;
     }
     case FAVORITE_ARTICLE_SUCCESS:
     case UNFAVORITE_ARTICLE_SUCCESS: {
       const {
         article: { slug, favorited, favoritesCount },
       } = payload;
-      return {
-        ...state,
-        articles: filterAssign(slug, state.articles, {
-          favorited,
-          favoritesCount,
-          favoriteRequesting: false,
-        }),
-      };
+      const article = draftState.articles.find(
+        article => article.slug === slug
+      );
+      draftState.favoriting = false;
+      article.favorited = favorited;
+      article.favoritesCount = favoritesCount;
+      break;
     }
     case RESET_ARTICLE_LIST:
-      return initialState;
+      draftState = initialState;
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
 
-const filterAssign = (slug, articles, rest) =>
-  articles.map(article => {
-    if (article.slug === slug) {
-      return {
-        ...article,
-        ...rest,
-      };
-    }
-    return article;
-  });
+export default (state = initialState, action) => reducer(state, action);

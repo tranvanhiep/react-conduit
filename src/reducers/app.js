@@ -12,6 +12,7 @@ import {
   UPDATE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_SUCCESS,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   appName: 'Conduit',
@@ -20,75 +21,60 @@ const initialState = {
   redirectTo: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case APP_LOAD:
-      return {
-        ...state,
-        appLoaded: true,
-      };
+      draftState.appLoaded = true;
+      break;
     case SESSION_LOGIN_SUCCESS: {
-      const { user: currentUser } = payload;
-      return {
-        ...state,
-        currentUser,
-      };
+      const { user } = payload;
+      draftState.currentUser = user;
+      break;
     }
     case SESSION_LOGIN_FAILURE: {
-      return {
-        ...state,
-        currentUser: null,
-      };
+      draftState.currentUser = null;
+      break;
     }
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS: {
       const { user } = payload;
-      return {
-        ...state,
-        redirectTo: '/',
-        currentUser: user,
-      };
+      draftState.redirectTo = '/';
+      draftState.currentUser = user;
+      break;
     }
     case LOGOUT:
-      return {
-        ...state,
-        currentUser: null,
-        redirectTo: '/',
-      };
+      draftState.currentUser = null;
+      draftState.redirectTo = '/';
+      break;
     case REDIRECT_TO:
-      return {
-        ...state,
-        redirectTo: payload,
-      };
+      draftState.redirectTo = payload;
+      break;
     case RESET_REDIRECT:
-      return {
-        ...state,
-        redirectTo: null,
-      };
+      draftState.redirectTo = null;
+      break;
     case DELETE_ARTICLE_SUCCESS:
-      return {
-        ...state,
-        redirectTo: '/',
-      };
+      draftState.redirectTo = '/';
+      break;
     case UPDATE_USER_SUCCESS: {
       const { user } = payload;
       const { username } = user;
-      return {
-        ...state,
-        currentUser: user,
-        redirectTo: `/profile/${username}`,
-      };
+      draftState.currentUser = user;
+      draftState.redirectTo = `/profile/${username}`;
+      break;
     }
     case CREATE_ARTICLE_SUCCESS:
     case UPDATE_ARTICLE_SUCCESS: {
       const {
         article: { slug },
       } = payload;
-      return { ...state, redirectTo: `/article/${slug}` };
+      draftState.redirectTo = `/article/${slug}`;
+      break;
     }
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

@@ -5,15 +5,14 @@ import Tags from './Tags';
 import cx from 'classnames';
 import { redirectToUrl } from '../../actions';
 import PropTypes from 'prop-types';
-import { ALL, FEED } from '../../constants';
 
 const YourFeedTab = ({ type, setConfig }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: type === FEED })}
+        className={cx('nav-link', { active: type === 'feed' })}
         onClick={setConfig}
-        disabled={type === FEED}
+        disabled={type === 'feed'}
       >
         Your Feed
       </button>
@@ -25,9 +24,9 @@ const GlobalFeedTab = ({ type, tag, setConfig }) => {
   return (
     <li className="nav-item">
       <button
-        className={cx('nav-link', { active: type === ALL && !tag })}
+        className={cx('nav-link', { active: type === 'all' && !tag })}
         onClick={setConfig}
-        disabled={type === ALL && !tag}
+        disabled={type === 'all' && !tag}
       >
         Global Feed
       </button>
@@ -68,7 +67,7 @@ class MainView extends Component {
     if (currentUser) {
       this.setState(state => ({
         ...state,
-        config: { ...state.config, type: FEED },
+        config: { ...state.config, type: 'feed' },
       }));
     }
   }
@@ -77,7 +76,7 @@ class MainView extends Component {
     event.preventDefault();
     this.setState(state => ({
       ...state,
-      config: { type: ALL, filters: {} },
+      config: { type: 'all', filters: {} },
     }));
   };
 
@@ -88,7 +87,7 @@ class MainView extends Component {
     if (currentUser) {
       this.setState(state => ({
         ...state,
-        config: { type: FEED, filters: {} },
+        config: { type: 'feed', filters: {} },
       }));
     } else {
       this.props.redirectToUrl('/login');
@@ -99,7 +98,7 @@ class MainView extends Component {
     event.preventDefault();
     this.setState(state => ({
       ...state,
-      config: { type: ALL, filters: { tag } },
+      config: { type: 'all', filters: { tag } },
     }));
   };
 
@@ -143,7 +142,6 @@ class MainView extends Component {
 }
 
 const mapStateToProps = state => ({
-  ...state.articleList,
   ...state.home,
   currentUser: state.app.currentUser,
 });

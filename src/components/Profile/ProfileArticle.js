@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ArticleList from '../common/ArticleList';
 import Proptypes from 'prop-types';
-import { ALL } from '../../constants';
 
 class ProfileArticle extends Component {
   constructor(props) {
     super(props);
     this.state = {
       config: {
-        type: ALL,
+        type: 'all',
         filters: {
           author: '',
         },

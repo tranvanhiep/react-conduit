@@ -25,6 +25,7 @@ import {
   LOAD_ARTICLE_PAGE,
   LOAD_ARTICLE_PAGE_FAILURE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   loading: true,
@@ -33,144 +34,109 @@ const initialState = {
   commentErrors: null,
   commentDeleting: false,
   commentSubmitting: false,
-  followRequesting: false,
-  favoriteRequesting: false,
+  following: false,
+  favoriting: false,
   articleDeleting: false,
   errors: null,
 };
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
     case LOAD_ARTICLE_PAGE:
-      return {
-        ...state,
-        loading: true,
-      };
+      draftState.loading = true;
+      draftState.errors = null;
+      break;
     case LOAD_ARTICLE_PAGE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        errors,
-      };
+      draftState.loading = false;
+      draftState.errors = errors;
+      break;
     case LOAD_ARTICLE_PAGE_SUCCESS: {
       const { article } = payload[0];
       const { comments } = payload[1];
-      return {
-        ...state,
-        article,
-        comments,
-        loading: false,
-        errors: null,
-      };
+      draftState.article = article;
+      draftState.comments = comments;
+      draftState.loading = false;
+      break;
     }
     case RESET_ARTICLE_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     case FAVORITE:
     case UNFAVORITE:
-      return {
-        ...state,
-        favoriteRequesting: true,
-      };
+      draftState.favoriting = true;
+      break;
     case FAVORITE_FAILURE:
     case UNFAVORITE_FAILURE:
-      return {
-        ...state,
-        favoriteRequesting: false,
-      };
+      draftState.favoriting = false;
+      break;
     case FAVORITE_SUCCESS:
     case UNFAVORITE_SUCCESS: {
       const { article } = payload;
-      return {
-        ...state,
-        favoriteRequesting: false,
-        article,
-      };
+      draftState.favoriting = false;
+      draftState.article = article;
+      break;
     }
     case FOLLOW_PROFILE:
     case UNFOLLOW_PROFILE:
-      return {
-        ...state,
-        followRequesting: true,
-      };
+      draftState.following = true;
+      break;
     case FOLLOW_PROFILE_FAILURE:
     case UNFOLLOW_PROFILE_FAILURE:
-      return {
-        ...state,
-        followRequesting: false,
-      };
+      draftState.following = false;
+      break;
     case FOLLOW_PROFILE_SUCCESS:
     case UNFOLLOW_PROFILE_SUCCESS: {
       const { profile } = payload;
-      return {
-        ...state,
-        followRequesting: false,
-        article: {
-          ...state.article,
-          author: profile,
-        },
-      };
+      draftState.following = false;
+      draftState.article.author = profile;
+      break;
     }
     case DELETE_ARTICLE:
-      return {
-        ...state,
-        articleDeleting: true,
-      };
+      draftState.articleDeleting = true;
+      draftState.errors = null;
+      break;
     case DELETE_ARTICLE_SUCCESS:
-      return {
-        ...state,
-        articleDeleting: false,
-        errors: null,
-      };
+      draftState.articleDeleting = false;
+      break;
     case DELETE_ARTICLE_FAILURE:
-      return {
-        ...state,
-        articleDeleting: false,
-        errors,
-      };
+      draftState.articleDeleting = false;
+      draftState.errors = errors;
+      break;
     case DELETE_COMMENT:
-      return {
-        ...state,
-        commentDeleting: true,
-      };
+      draftState.commentDeleting = true;
+      draftState.commentErrors = null;
+      break;
     case DELETE_COMMENT_FAILURE:
-      return {
-        ...state,
-        commentErrors: errors,
-        commentDeleting: false,
-      };
+      draftState.commentDeleting = false;
+      draftState.commentErrors = errors;
+      break;
     case DELETE_COMMENT_SUCCESS: {
       const { id } = action;
-      return {
-        ...state,
-        comments: state.comments.filter(comment => comment.id !== id),
-        commentErrors: null,
-        commentDeleting: false,
-      };
+      draftState.commentDeleting = false;
+      draftState.comments = draftState.comments.filter(
+        comment => comment.id !== id
+      );
+      break;
     }
     case ADD_COMMENT:
-      return {
-        ...state,
-        commentSubmitting: true,
-      };
+      draftState.commentSubmitting = true;
+      draftState.commentErrors = null;
+      break;
     case ADD_COMMENT_FAILURE:
-      return {
-        ...state,
-        commentErrors: errors,
-        commentSubmitting: false,
-      };
-    case ADD_COMMENT_SUCCESS: {
-      const { comment } = payload;
-      const comments = [...state.comments];
-      comments.unshift(comment);
-      return {
-        ...state,
-        commentErrors: null,
-        commentSubmitting: false,
-        comments,
-      };
-    }
+      draftState.commentSubmitting = false;
+      draftState.commentErrors = errors;
+      break;
+    case ADD_COMMENT_SUCCESS:
+      {
+        const { comment } = payload;
+        draftState.commentSubmitting = false;
+        draftState.comments.unshift(comment);
+      }
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

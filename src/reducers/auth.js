@@ -8,39 +8,38 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   inProgress: false,
   errors: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, errors } = action;
 
   switch (type) {
     case LOGIN:
     case REGISTER:
-      return {
-        ...state,
-        inProgress: true,
-      };
+      draftState.inProgress = true;
+      draftState.errors = null;
+      break;
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      return {
-        ...state,
-        inProgress: false,
-      };
+      draftState.inProgress = false;
+      break;
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
-      return {
-        ...state,
-        inProgress: false,
-        errors,
-      };
+      draftState.inProgress = false;
+      draftState.errors = errors;
+      break;
     case RESET_LOGIN_PAGE:
     case RESET_REGISTER_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

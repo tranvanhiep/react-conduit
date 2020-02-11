@@ -8,13 +8,8 @@ import ProfileArticle from './ProfileArticle';
 import ProfileFavorite from './ProfileFavorite';
 import PropTypes from 'prop-types';
 
-const ProfileAction = ({
-  currentUser,
-  username,
-  following,
-  followRequesting,
-  params,
-}) => {
+const ProfileAction = ({ currentUser, author, following, params }) => {
+  const { username } = author;
   if (currentUser && currentUser.username === username) {
     return (
       <Link
@@ -27,12 +22,7 @@ const ProfileAction = ({
     );
   } else {
     return (
-      <FollowButton
-        username={username}
-        following={following}
-        followRequesting={followRequesting}
-        params={params}
-      />
+      <FollowButton author={author} following={following} params={params} />
     );
   }
 };
@@ -91,13 +81,14 @@ class Profile extends Component {
       loading,
       currentUser,
       match: { params },
+      following,
     } = this.props;
 
     if (loading || !profile) {
       return null;
     }
 
-    const { username, bio, image, following, followRequesting } = profile;
+    const { username, bio, image } = profile;
 
     return (
       <div className="profile-page">
@@ -109,10 +100,9 @@ class Profile extends Component {
                 <h4>{username}</h4>
                 <p>{bio}</p>
                 <ProfileAction
-                  username={username}
+                  author={profile}
                   following={following}
                   currentUser={currentUser}
-                  followRequesting={followRequesting}
                   params={params}
                 />
               </div>
@@ -173,8 +163,8 @@ Profile.propTypes = {
     bio: PropTypes.string,
     image: PropTypes.string,
     following: PropTypes.bool,
-    followRequesting: PropTypes.bool,
   }),
+  following: PropTypes.bool,
   loading: PropTypes.bool,
   currentUser: PropTypes.shape({
     email: PropTypes.string,

@@ -1,6 +1,6 @@
 import http from './http';
 import { LOGOUT, LOGIN_SUCCESS, REGISTER_SUCCESS } from './actions';
-import { TOKEN_KEY } from './constants';
+import { TOKEN_KEY } from './constants/constants';
 
 const localStorageMiddleware = store => next => action => {
   const { type, payload } = action;

@@ -5,6 +5,7 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILURE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   loaded: false,
@@ -13,37 +14,33 @@ const initialState = {
   errors: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, errors } = action;
 
   switch (type) {
     case LOAD_SETTINGS_PAGE:
-      return {
-        ...state,
-        loaded: true,
-      };
+      draftState.loaded = true;
+      draftState.errors = null;
+      break;
     case RESET_SETTINGS_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     case UPDATE_USER:
-      return {
-        ...state,
-        inProgress: true,
-      };
+      draftState.inProgress = true;
+      draftState.errors = null;
+      break;
     case UPDATE_USER_SUCCESS:
-      return {
-        ...state,
-        errors: null,
-        inProgress: false,
-        submitted: true,
-      };
+      draftState.inProgress = false;
+      draftState.submitted = true;
+      break;
     case UPDATE_USER_FAILURE:
-      return {
-        ...state,
-        errors,
-        inProgress: false,
-        submitted: false,
-      };
+      draftState.inProgress = false;
+      draftState.submitted = false;
+      draftState.errors = errors;
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

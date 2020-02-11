@@ -17,17 +17,13 @@ class ArticleActions extends Component {
     const {
       currentUser,
       article,
-      followRequesting,
-      favoriteRequesting,
+      following,
+      favoriting,
       articleDeleting,
       params,
     } = this.props;
-    const {
-      author: { username, following },
-      favorited,
-      favoritesCount,
-      slug,
-    } = article;
+    const { author, favorited, favoritesCount, slug } = article;
+    const { username } = author;
 
     if (currentUser && currentUser.username === username) {
       return (
@@ -53,15 +49,14 @@ class ArticleActions extends Component {
     return (
       <Fragment>
         <FollowButton
-          username={username}
+          author={author}
           following={following}
-          followRequesting={followRequesting}
         ></FollowButton>
         &nbsp;
         <FavoriteButton
           favorited={favorited}
           slug={slug}
-          favoriteRequesting={favoriteRequesting}
+          favoriting={favoriting}
           params={params}
         >
           {favorited ? 'Unfavorite' : 'Favorite'} Article ({favoritesCount})
@@ -85,8 +80,8 @@ ArticleActions.propTypes = {
     bio: PropTypes.string,
     image: PropTypes.string,
   }),
-  followRequesting: PropTypes.bool,
-  favoriteRequesting: PropTypes.bool,
+  following: PropTypes.bool,
+  favoriting: PropTypes.bool,
   articleDeleting: PropTypes.bool,
 };
 

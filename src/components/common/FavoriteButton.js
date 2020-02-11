@@ -33,7 +33,7 @@ class FavoriteButton extends Component {
   };
 
   render() {
-    const { favorited, slug, children, favoriteRequesting } = this.props;
+    const { favorited, slug, children, favoriting } = this.props;
 
     return (
       <button
@@ -43,7 +43,7 @@ class FavoriteButton extends Component {
           { 'btn-outline-primary': !favorited }
         )}
         onClick={this.toggleFavorite(favorited, slug)}
-        disabled={favoriteRequesting}
+        disabled={favoriting}
       >
         {children}
       </button>
@@ -60,7 +60,7 @@ FavoriteButton.propTypes = {
   favorited: PropTypes.bool,
   slug: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
-  favoriteRequesting: PropTypes.bool,
+  favoriting: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, {

@@ -33,7 +33,10 @@ class FollowButton extends Component {
   };
 
   render() {
-    const { username, following, followRequesting } = this.props;
+    const {
+      author: { username, following },
+      following: isFollowing,
+    } = this.props;
 
     return (
       <button
@@ -42,7 +45,7 @@ class FollowButton extends Component {
           'btn-secondary': following,
         })}
         onClick={this.toggleFollow(following, username)}
-        disabled={followRequesting}
+        disabled={isFollowing}
       >
         <i className="ion-plus-round"></i>
         &nbsp; {following ? 'Unfollow' : 'Follow'} {username}
@@ -59,7 +62,7 @@ FollowButton.propType = {
   currentUser: PropTypes.object,
   username: PropTypes.string,
   following: PropTypes.bool,
-  followRequesting: PropTypes.bool,
+  isFollowing: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, {

@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ArticleList from '../common/ArticleList';
 import PropTypes from 'prop-types';
-import { ALL } from '../../constants';
 
 class ProfileFavorite extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: ALL,
+      type: 'all',
       filters: {
         favorited: '',
       },

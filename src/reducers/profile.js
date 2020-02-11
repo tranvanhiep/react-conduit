@@ -10,62 +10,54 @@ import {
   LOAD_PROFILE_PAGE,
   LOAD_PROFILE_PAGE_FAILURE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   profile: null,
   loading: true,
-  followRequesting: false,
+  following: false,
   errors: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
     case LOAD_PROFILE_PAGE:
-      return {
-        ...state,
-        loading: true,
-      };
+      draftState.loading = true;
+      draftState.errors = null;
+      break;
     case LOAD_PROFILE_PAGE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        errors,
-      };
+      draftState.loading = false;
+      draftState.errors = errors;
+      break;
     case LOAD_PROFILE_PAGE_SUCCESS: {
       const { profile } = payload;
-      return {
-        ...state,
-        profile,
-        loading: false,
-        errors: null,
-      };
+      draftState.loading = false;
+      draftState.profile = profile;
+      break;
     }
     case RESET_PROFILE_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     case FOLLOW:
     case UNFOLLOW:
-      return {
-        ...state,
-        followRequesting: true,
-      };
+      draftState.following = true;
+      break;
     case FOLLOW_FAILURE:
     case UNFOLLOW_FAILURE:
-      return {
-        ...state,
-        followRequesting: false,
-      };
+      draftState.following = false;
+      break;
     case FOLLOW_SUCCESS:
     case UNFOLLOW_SUCCESS: {
       const { profile } = payload;
-      return {
-        ...state,
-        profile,
-        followRequesting: false,
-      };
+      draftState.following = false;
+      draftState.profile = profile;
+      break;
     }
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

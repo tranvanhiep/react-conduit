@@ -10,6 +10,7 @@ import {
   LOAD_EDITOR_PAGE,
   LOAD_EDITOR_PAGE_FAILURE,
 } from '../actions';
+import produce from 'immer';
 
 const initialState = {
   article: {
@@ -23,57 +24,48 @@ const initialState = {
   loaded: false,
 };
 
-export default (state = initialState, action) => {
+const reducer = produce((draftState, action) => {
   const { type, payload, errors } = action;
 
   switch (type) {
     case UPDATE_ARTICLE:
     case CREATE_ARTICLE:
-      return {
-        ...state,
-        inProgress: true,
-      };
+      draftState.inProgress = true;
+      draftState.errors = null;
+      break;
     case UPDATE_ARTICLE_FAILURE:
     case CREATE_ARTICLE_FAILURE:
-      return {
-        ...state,
-        errors,
-        inProgress: false,
-      };
+      draftState.inProgress = false;
+      draftState.errors = errors;
+      break;
     case UPDATE_ARTICLE_SUCCESS:
     case CREATE_ARTICLE_SUCCESS: {
       const { article } = payload;
-      return {
-        ...state,
-        inProgress: false,
-        errors: null,
-        article,
-      };
+      draftState.inProgress = false;
+      draftState.article = article;
+      break;
     }
     case LOAD_EDITOR_PAGE:
-      return {
-        ...state,
-        inProgress: true,
-      };
+      draftState.inProgress = true;
+      draftState.errors = null;
+      break;
     case LOAD_EDITOR_PAGE_FAILURE:
-      return {
-        ...state,
-        inProgress: false,
-        errors,
-      };
+      draftState.inProgress = false;
+      draftState.errors = errors;
+      break;
     case LOAD_EDITOR_PAGE_SUCCESS: {
       const { article } = payload;
-      return {
-        ...state,
-        article,
-        loaded: true,
-        inProgress: false,
-        errors: null,
-      };
+      draftState.inProgress = false;
+      draftState.article = article;
+      draftState.loaded = true;
+      break;
     }
     case RESET_EDITOR_PAGE:
-      return initialState;
+      draftState = initialState;
+      break;
     default:
-      return state;
+      break;
   }
-};
+});
+
+export default (state = initialState, action) => reducer(state, action);

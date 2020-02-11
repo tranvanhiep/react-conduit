@@ -1,6 +1,6 @@
 import http from '../http';
 import { fulfilHandler, rejectHandler } from '../utils';
-import { TOKEN_KEY } from '../constants';
+import { TOKEN_KEY } from '../constants/constants';
 
 export const RESET_REDIRECT = 'RESET_REDIRECT';
 export const REDIRECT_TO = 'REDIRECT_TO';
